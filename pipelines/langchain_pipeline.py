@@ -1,27 +1,6 @@
 
-"""
-title: LangChain Pipeline
-author: open-webui
-date: 2024-05-30
-version: 1.0
-license: MIT
-description: A pipeline for retrieving relevant information using LangChain with tool binding support.
-requirements: langchain, langchain-openai, datasets>=2.6.1
-"""
 
-import json
-import os
 from typing import Generator, Iterator, List, Union
-
-from git import Repo
-from langchain.agents import AgentExecutor, create_openai_functions_agent
-from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.schema import HumanMessage, SystemMessage
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.tools import Tool
-from langchain_community.document_loaders import GitLoader
-from langchain_community.vectorstores import FAISS
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 
 class Pipeline:
@@ -31,6 +10,11 @@ class Pipeline:
         self.retriever = None
         
     async def on_startup(self):
+        from langchain.agents import (AgentExecutor,
+                                      create_openai_functions_agent)
+        from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+        from langchain_openai import ChatOpenAI
+
         # Initialize OpenAI chat model with tool binding capability
         self.llm = ChatOpenAI(
             temperature=0.7,
@@ -69,11 +53,20 @@ class Pipeline:
         pass
 
     def _initialize_open_api_doc(self):
+        import json
+        import os
+        
         with open('./kenar-apis.json', 'r') as f:
             self.open_api_doc = json.load(f)
 
     def _initialize_github(self):
         """Load and process documents from github.com/divar-ir/kenar-docs repository"""
+        import os
+
+        from git import Repo
+        from langchain.text_splitter import RecursiveCharacterTextSplitter
+        from langchain_community.document_loaders import GitLoader
+
         repo_path = "./kenar-docs"
         repo_url = "https://github.com/divar-ir/kenar-docs.git"
 
@@ -103,6 +96,11 @@ class Pipeline:
 
     def _initialize_vector_stores(self):
         """Initialize two vector stores: one for GitHub docs and one for OpenAPI spec"""
+
+        from langchain.text_splitter import RecursiveCharacterTextSplitter
+        from langchain_community.vectorstores import FAISS
+        from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+
         # Initialize OpenAI embeddings
         embeddings = OpenAIEmbeddings()
 
@@ -189,7 +187,7 @@ class Pipeline:
         Returns:
             A response from the RAG chain or agent
         """
-
+        from langchain.schema import HumanMessage, SystemMessage
         try:
             # Convert message history to the format expected by LangChain
             chat_history = []
