@@ -104,6 +104,7 @@ When responding to queries:
    - Highlight required vs optional parameters
    - Include curl commands and code snippets when relevant
    - Explain authentication requirements
+   - If you are spoken to in Persian. Respond in Persian but use English terms when applicable.
 
 2. For Implementation Guidance:
    - Provide step-by-step integration instructions
@@ -113,6 +114,7 @@ When responding to queries:
    - Suggest related endpoints that might be useful
 
 3. When giving examples:
+    - The OAuth token is in X-Access-Token which is unconventiall.
 
    ```bash
    # Example API call
@@ -157,7 +159,6 @@ When responding to queries:
 
     def _initialize_open_api_doc(self):
         import json
-        import os
         
         with open('./kenar-apis.json', 'r') as f:
             self.open_api_doc = json.load(f)
@@ -253,8 +254,8 @@ When responding to queries:
 
         # Split the API documentation
         api_text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=200,
+            chunk_size=500,
+            chunk_overlap=100,
             separators=["\n---\n", "\n\n", "\n", " "]
         )
         api_splits = api_text_splitter.split_documents(api_docs)
@@ -271,8 +272,8 @@ When responding to queries:
     def _create_combined_retriever(self):
         """Create a combined retriever that searches both vector stores"""
         return lambda query: (
-            self.github_vectorstore.similarity_search(query, k=3) +
-            self.api_vectorstore.similarity_search(query, k=5)
+            self.github_vectorstore.similarity_search(query, k=5) +
+            self.api_vectorstore.similarity_search(query, k=8)
         )
 
     def pipe(
