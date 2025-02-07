@@ -305,14 +305,14 @@ When responding to queries:
             safe_context = context.replace('{', '{{').replace('}', '}}')
             safe_user_message = user_message.replace('{', '{{').replace('}', '}}')
             
-            enhanced_message = f"""Please answer based on the following context from Kenar documentation:
+            enhanced_message = f"""I have found some potentially relevant information from Kenar documentation that might help answer this question. Feel free to use this context if relevant, but also rely on our conversation history and your general knowledge about APIs and development:
 
-Context:
+Relevant Documentation:
 {safe_context}
 
 User Question: {safe_user_message}
 
-Please provide a clear and specific answer based on the above context."""
+Please provide a helpful answer, incorporating the context where appropriate but maintaining the natural flow of our conversation."""
 
             # Convert message history to the format expected by LangChain
             chat_history = []
