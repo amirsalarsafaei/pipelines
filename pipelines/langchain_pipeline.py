@@ -2,12 +2,34 @@
 
 from typing import Generator, Iterator, List, Union
 
+from pydantic import BaseModel
+
 
 class Pipeline:
+
+    class Valves(BaseModel):
+        OPENAI_API_BASE_URL: str = "https://api.openai.com/v1"
+        OPENAI_API_KEY: str = ""
+        pass
+
     def __init__(self):
+        import os
         self.rag_chain = None
         self.tools = []
         self.retriever = None
+
+        self.valves = self.Valves(
+            **{
+                "OPENAI_API_KEY": os.getenv(
+                    "OPENAI_API_KEY", "your-openai-api-key-here"
+                ),
+                "OPENAI_API_BASE_URL": os.getenv(
+                    "OPENAI_API_BASE_URL", "https://api.openai.com/v1"
+                ),
+
+            },
+
+        )
         
     async def on_startup(self):
         from langchain.agents import (AgentExecutor,
