@@ -1,0 +1,4554 @@
+{
+  "openapi": "3.0.1",
+  "servers": [
+    {
+      "url": "https://api.divar.ir/"
+    }
+  ],
+  "security": [
+    {
+      "APIKeyHeader": []
+    }
+  ],
+  "info": {
+    "title": "Kenar APIs",
+    "version": "v1.2.0"
+  },
+  "tags": [
+    {
+      "name": "ChatPlatformService"
+    },
+    {
+      "name": "PaymentTicket"
+    },
+    {
+      "name": "Events"
+    },
+    {
+      "name": "Finder"
+    },
+    {
+      "name": "Post"
+    },
+    {
+      "name": "Addons"
+    },
+    {
+      "name": "Semantic"
+    },
+    {
+      "name": "ChatAPI"
+    },
+    {
+      "name": "Assets"
+    },
+    {
+      "name": "limited",
+      "description": "API های این بخش آزمایشی و محدود هستند. محیط تستی برای آن‌ها وجود ندارد. برای اطلاعات بیشار در پنل کنار تیکت پشتیبانی با موضوع 'دسترسی به API های پرداخت'"
+    }
+  ],
+  "paths": {
+    "/experimental/open-platform/chatbot-conversations/{conversation_id}/messages": {
+      "post": {
+        "tags": [
+          "ChatAPI"
+        ],
+        "operationId": "ChatAPI_ChatBotSendMessage",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatAPIChatBotSendMessageBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/chatapiChatBotSendMessageResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/experimental/open-platform/post/{post_token}/reorder": {
+      "post": {
+        "tags": [
+          "limited"
+        ],
+        "summary": "نردبان کردن یک آگهی",
+        "description": "با استفاده این API می‌توانید طبق قیمت تغییت شده در API pricing آگهی را نردبان کنید. این API نیازمند اسکوپ PAYMENT_ALL_POSTS_REORDER است.",
+        "operationId": "Payment_ReorderPost",
+        "parameters": [
+          {
+            "name": "post_token",
+            "in": "path",
+            "description": "توکن آگهی، که یک رشته ۸ یا ۹ کاراکتری می‌باشد.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentReorderPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/paymentReorderPostResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": [],
+            "OAuth2": [
+              "PAYMENT_ALL_REORDER"
+            ]
+          }
+        ],
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/experimental/open-platform/semantic/post/{token}": {
+      "post": {
+        "tags": [
+          "Semantic"
+        ],
+        "operationId": "Semantic_CreatePostSemantic",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SemanticCreatePostSemanticBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/semanticCreatePostSemanticResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1/open-platform/add-ons/post/{token}": {
+      "get": {
+        "tags": [
+          "Addons"
+        ],
+        "operationId": "Addons_GetPostAddons",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addonsGetPostAddonsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Addons"
+        ],
+        "operationId": "Addons_DeletePostAddon",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/addons/post/{token}": {
+      "get": {
+        "tags": [
+          "Addons"
+        ],
+        "operationId": "Addons_GetPostAddons2",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addonsGetPostAddonsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Addons"
+        ],
+        "operationId": "Addons_DeletePostAddon2",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/addons/user/{id}": {
+      "delete": {
+        "tags": [
+          "Addons"
+        ],
+        "operationId": "Addons_DeleteUserAddon",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/addons/user/{phone}": {
+      "get": {
+        "tags": [
+          "Addons"
+        ],
+        "operationId": "Addons_GetUserAddons",
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addonsGetUserAddonsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/body-status": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetBodyStatuses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetBodyStatusesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/brand-model/{category}": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetBrandModels",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetBrandModelsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/category": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetCategories",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetCategoriesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/city": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetCities",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetCitiesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/color/{category}": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetColors",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetColorsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/district": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetDistricts",
+        "parameters": [
+          {
+            "name": "city_slug",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetDistrictsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/district/{city_slug}": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetDistricts2",
+        "parameters": [
+          {
+            "name": "city_slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetDistrictsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/internal-storage": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetInternalStorages",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetInternalStoragesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/oauth-scope": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetOAuthScopes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetOAuthScopesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/permission": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetPermissions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetPermissionsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/ram-memory": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetRamMemories",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetRamMemoriesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/assets/service-type": {
+      "get": {
+        "tags": [
+          "Assets"
+        ],
+        "operationId": "Assets_GetServiceTypes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetsGetServiceTypesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/bot/send-message": {
+      "post": {
+        "tags": [
+          "ChatPlatformService"
+        ],
+        "summary": "deprecated",
+        "operationId": "ChatPlatformService_BotSendMessage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/chatplatformBotSendMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/chatplatformBotSendMessageResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1/open-platform/chat/conversations/{conversation_id}": {
+      "get": {
+        "tags": [
+          "ChatAPI"
+        ],
+        "operationId": "ChatAPI_GetConversation",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/chatapiGetConversationResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/events/subscriptions": {
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "operationId": "Events_RegisterEventSubscription",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/eventsRegisterEventSubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/eventsRegisterEventSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1/open-platform/finder/post": {
+      "post": {
+        "tags": [
+          "Finder"
+        ],
+        "summary": "deprecated",
+        "operationId": "Finder_SearchPost",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/finderSearchPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/finderSearchPostResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1/open-platform/finder/post/{token}": {
+      "get": {
+        "tags": [
+          "Finder"
+        ],
+        "operationId": "Finder_GetPost",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/finderGetPostResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/finder/user-posts": {
+      "get": {
+        "tags": [
+          "Finder"
+        ],
+        "operationId": "Finder_GetUserPosts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/finderGetUserPostsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/payment-ticket/validate": {
+      "post": {
+        "tags": [
+          "PaymentTicket"
+        ],
+        "operationId": "PaymentTicket_Validate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/payment_ticketValidateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/payment_ticketValidateResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1/open-platform/post/image-upload-url": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "Post_GetImageUploadURL",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/postGetImageUploadURLResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/post/{post_token}": {
+      "put": {
+        "tags": [
+          "Post"
+        ],
+        "operationId": "Post_EditPost",
+        "parameters": [
+          {
+            "name": "post_token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostEditPostBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/postEditPostResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1/open-platform/post/{post_token}/pricing": {
+      "get": {
+        "tags": [
+          "limited"
+        ],
+        "summary": "دریافت قیمت سرویس های مختلف یک آگهی",
+        "description": "با استفاده از این API و با اجازه کاربر می‌توانید قیمت سرویس های مختلف مانند نردبان را بدست آورید. قیمت این API لزوما با قیمتی که در دیوار است یکی نیست و قیمت گذاری ممکن است متفاوت باشد. از این API برای دریافت قیمت قبل از اعمال خدمات (مانند نردبان کردن پست) استفاده کنید. این API نیازمند اسکوپ PAYMENT_ALL_POSTS_PRICING_READ است.",
+        "operationId": "Payment_GetPostPricing",
+        "parameters": [
+          {
+            "name": "post_token",
+            "in": "path",
+            "description": "توکن آگهی، که یک رشته ۸ یا ۹ کاراکتری می‌باشد.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/paymentGetPostPricingResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": [],
+            "OAuth2": [
+              "PAYMENT_ALL_POSTS_PRICING_READ"
+            ]
+          }
+        ]
+      }
+    },
+    "/v1/open-platform/semantic/user/{phone}": {
+      "post": {
+        "tags": [
+          "Semantic"
+        ],
+        "operationId": "Semantic_CreateUserSemantic",
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SemanticCreateUserSemanticBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/semanticCreateUserSemanticResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      },
+      "delete": {
+        "tags": [
+          "Semantic"
+        ],
+        "operationId": "Semantic_DeleteUserSemantic",
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/semanticDeleteUserSemanticResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/open-platform/users": {
+      "get": {
+        "tags": [
+          "Finder"
+        ],
+        "operationId": "Finder_GetUser2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/finderUser"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Finder"
+        ],
+        "operationId": "Finder_GetUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/finderGetUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/finderUser"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v2/open-platform/addons/post/{token}": {
+      "post": {
+        "security": [
+          {
+            "OAuth2": [
+              "USER_POSTS_ADDON_CREATE"
+            ]
+          }
+        ],
+        "tags": [
+          "Addons"
+        ],
+        "operationId": "Addons_CreatePostAddonV2",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonsCreatePostAddonV2Body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addonsCreatePostAddonResponseV2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v2/open-platform/addons/user/{phone}": {
+      "post": {
+        "tags": [
+          "Addons"
+        ],
+        "operationId": "Addons_CreateUserAddonV2",
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonsCreateUserAddonV2Body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addonsCreateUserAddonResponseV2"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v2/open-platform/chat/conversation": {
+      "post": {
+        "tags": [
+          "ChatPlatformService"
+        ],
+        "summary": "deprecated",
+        "operationId": "ChatPlatformService_SendMessageV2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/chatplatformSendMessageV2Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/chatplatformSendMessageV2Response"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v2/open-platform/conversations/{conversation_id}/messages": {
+      "post": {
+        "tags": [
+          "ChatAPI"
+        ],
+        "operationId": "ChatAPI_ConversationSendMessage",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatAPIConversationSendMessageBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/chatapiConversationSendMessageResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v2/open-platform/finder/post": {
+      "post": {
+        "tags": [
+          "Finder"
+        ],
+        "operationId": "Finder_SearchPostV2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/finderSearchPostsV2Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/finderSearchPostV2Response"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/googlerpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddonSecondaryLinkagePosition": {
+        "type": "string",
+        "enum": [
+          "POST_SPEC_HEAD",
+          "POST_SPEC_TAIL",
+          "POST_PRICE_SPEC",
+          "POST_DESC_TAIL"
+        ]
+      },
+      "AddonSemanticCarVerificationStage": {
+        "type": "string",
+        "enum": [
+          "CARVERIFICATIONSTAGE_NOT_STARTED",
+          "CARVERIFICATIONSTAGE_SHAHKAR",
+          "CAR_CARD_VERIFICATION",
+          "CAR_MODEL_VERIFICATION"
+        ]
+      },
+      "AddonSemanticIdentityVerificationResult": {
+        "title": "- FACE_AND_ID_MATCHED: ID means melli CARD, this value results in badge in matching",
+        "type": "string",
+        "enum": [
+          "FACE_AND_ID_MATCHED"
+        ]
+      },
+      "AddonSemanticIdentityVerificationStage": {
+        "type": "string",
+        "enum": [
+          "IDENTITYVERIFICATIONSTAGE_NOT_STARTED",
+          "NATIONAL_INFO_VERIFICATION",
+          "IMAGE_VERIFICATION",
+          "VIDEO_VERIFICATION"
+        ]
+      },
+      "AddonSemanticInspectionResult": {
+        "type": "string",
+        "enum": [
+          "INSPECTION_APPROVED"
+        ]
+      },
+      "AddonSemanticOwnershipResult": {
+        "type": "string",
+        "enum": [
+          "OWNERSHIP_CONFIRMED"
+        ]
+      },
+      "AddonSemanticPaymentMethod": {
+        "title": "- SECURE: this value results in badge in matching",
+        "type": "string",
+        "enum": [
+          "SECURE"
+        ]
+      },
+      "AddonSemanticPostVerificationResult": {
+        "type": "string",
+        "enum": [
+          "POST_INFORMATION_MATCHED"
+        ]
+      },
+      "AddonsCreatePostAddonV2Body": {
+        "type": "object",
+        "properties": {
+          "widgets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/addonsWidget"
+            }
+          },
+          "semantic": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "AddonsCreateUserAddonV2Body": {
+        "type": "object",
+        "properties": {
+          "widgets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/addonsWidget"
+            }
+          },
+          "semantic": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ticket_uuid": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "BotButtonButtonData": {
+        "type": "object",
+        "properties": {
+          "icon_name": {
+            "type": "string"
+          },
+          "extra_data": {
+            "type": "object",
+            "properties": {}
+          },
+          "caption": {
+            "type": "string"
+          },
+          "direct_link": {
+            "type": "string"
+          }
+        }
+      },
+      "ChatAPIChatBotSendMessageBody": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/chatplatformMessageType"
+          },
+          "text_message": {
+            "type": "string"
+          },
+          "buttons": {
+            "$ref": "#/components/schemas/chatapiChatButtonGrid"
+          }
+        }
+      },
+      "ChatAPIConversationSendMessageBody": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/chatplatformMessageType"
+          },
+          "message": {
+            "type": "string"
+          },
+          "sender_buttons": {
+            "$ref": "#/components/schemas/chatapiChatButtonGrid"
+          },
+          "receiver_buttons": {
+            "$ref": "#/components/schemas/chatapiChatButtonGrid"
+          }
+        }
+      },
+      "DivarIconsIconName": {
+        "type": "string",
+        "enum": [
+          "KEYBOARD_ARROW_RIGHT",
+          "KEYBOARD_ARROW_LEFT",
+          "ARROW_FORWARD",
+          "REFRESH",
+          "REMOVE",
+          "SEND",
+          "DELETE",
+          "PHOTO_LIBRARY",
+          "ADD",
+          "CLOSE",
+          "CHECKED",
+          "CHECK_BOX",
+          "CHECK_BOX_OUTLINE_BLANK",
+          "CHAT_DOUBLE",
+          "CONTENT_COPY",
+          "REPORT",
+          "CAT_VEHICLES",
+          "PERSON",
+          "CALL",
+          "CAT_ELECTRONIC_DEVICES",
+          "PLACE",
+          "HISTORY",
+          "CHECK_CIRCLE",
+          "ACCESS_TIME",
+          "INFO_OUTLINE",
+          "PAYMENT",
+          "SHOW_CHART",
+          "CONTACT_PHONE",
+          "TRENDING_UP",
+          "CAR_BODY",
+          "INSPECT",
+          "CAR_TIRES",
+          "CAR_ELECTRONICS",
+          "CAR_ENGINE",
+          "CAR_HYDRAULICS",
+          "CAR_OPTIONS",
+          "CAR_DOCUMENTS",
+          "CANCEL",
+          "WARNING",
+          "HELP",
+          "MONEY",
+          "KARNAMEH",
+          "EDIT",
+          "SUPPORT",
+          "CAR_INSPECTED",
+          "TERMS",
+          "LADDER_COLLECTION",
+          "HOUSE_INSPECTION",
+          "ADD_CIRCLE",
+          "GAVEL",
+          "LADDER_GROUP",
+          "VISIBILITY",
+          "TIMER",
+          "LOCK",
+          "BLOCK",
+          "EMAIL_OUTLINE",
+          "ASSIGNMENT_IND",
+          "TOC",
+          "EXIT_TO_APP",
+          "HELP_OUTLINE",
+          "TELEPHONE",
+          "EVENT_NOTE",
+          "COMMUNITY",
+          "REAL_ESTATE",
+          "VR",
+          "NUM_1",
+          "NUM_2",
+          "NUM_3",
+          "NUM_4",
+          "NUM_5",
+          "NUM_6",
+          "NUM_7",
+          "NUM_8",
+          "NUM_9",
+          "ELEVATOR",
+          "PARKING",
+          "CABINET",
+          "BALCONY",
+          "TEXTURE",
+          "WC",
+          "SNOWFLAKE",
+          "SUNNY",
+          "THERMOMETER",
+          "VERIFIED",
+          "SETTINGS",
+          "CREDIT_ACCOUNT",
+          "CAR_AUCTION",
+          "CONCIERGE_SALE",
+          "INFO",
+          "MARKETPLACE_GENERAL",
+          "MARKETPLACE_HOME",
+          "MARKETPLACE_PERSONAL",
+          "MARKETPLACE_ELECTRONIC_DEVICES",
+          "INDICATOR_F",
+          "SHARE",
+          "CAR_INSPECTION",
+          "VERIFIED_USER",
+          "MARKETPLACE_LIST",
+          "BINDER",
+          "STAR",
+          "CAR_AMENITY",
+          "CAR_SAFETY",
+          "CAR_EQUIPMENT",
+          "BUSINESS_REAL_ESTATE_AGENCY",
+          "BUSINESS_MARKETPLACE",
+          "BUSINESS_AUTO_DEALERSHIP",
+          "LOCAL_SHIPPING",
+          "MOPED",
+          "TEXT_SMS_OUTLINE",
+          "PLACE_F",
+          "MOBILE_FRIENDLY",
+          "STAR_BORDER",
+          "IMAGE_OUTLINE",
+          "ARTICLE_OUTLINE",
+          "POST_FEEDBACK",
+          "DOWNLOAD",
+          "FILTER",
+          "SUPPORT_AGENT",
+          "MORE_VERT",
+          "BOOKMARK",
+          "BOOKMARK_BORDER",
+          "GIFT",
+          "ANALYTICS",
+          "STORE",
+          "STORE_OUTLINE",
+          "CAT_BUSINESSES",
+          "CAT_FOR_THE_HOME",
+          "CAT_SERVICES",
+          "CAT_PERSONAL",
+          "CAT_LEISURE_HOBBIES",
+          "CAT_JOBS",
+          "SCHOOL",
+          "NOTE",
+          "LOGOUT",
+          "PERSON_ADD",
+          "ADVERT",
+          "ADVERT_OUTLINE",
+          "ACCESS_TIME_OUTLINE",
+          "NOTE_OUTLINE",
+          "PAYMENT_OUTLINE",
+          "INSTAGRAM",
+          "TAG_CHECK_CIRCLE",
+          "FULLSCREEN",
+          "ADD_CIRCLE_OUTLINE",
+          "NOTE_ADD_OUTLINE",
+          "BRAND_ALFA_ROMEO",
+          "BRAND_AMICO",
+          "BRAND_ARIO",
+          "BRAND_ARISAN",
+          "BRAND_AUDI",
+          "BRAND_BAIC",
+          "BRAND_BESTURN",
+          "BRAND_BISU",
+          "BRAND_BMW",
+          "BRAND_BORGWARD",
+          "BRAND_BRILLIANCE",
+          "BRAND_BUICK",
+          "BRAND_BYD",
+          "BRAND_CAPRA",
+          "BRAND_CHANGAN",
+          "BRAND_CHERY",
+          "BRAND_CHEVROLET",
+          "BRAND_CITROEN",
+          "BRAND_DAEWOO",
+          "BRAND_DATSUN",
+          "BRAND_DEER",
+          "BRAND_DELICA",
+          "BRAND_DENA",
+          "BRAND_DIGNITY",
+          "BRAND_DODGE",
+          "BRAND_DOMY",
+          "BRAND_DONGFENG",
+          "BRAND_DS",
+          "BRAND_FARDA",
+          "BRAND_FAW",
+          "BRAND_FIAT",
+          "BRAND_FIDELITY",
+          "BRAND_FORD",
+          "BRAND_FOTON",
+          "BRAND_GAC_GONOW",
+          "BRAND_GEELY",
+          "BRAND_GREATWALL",
+          "BRAND_HAFEI_LOBO",
+          "BRAND_HAIMA",
+          "BRAND_HANTENG",
+          "BRAND_HAVAL",
+          "BRAND_HILLMAN",
+          "BRAND_HONDA",
+          "BRAND_HUMMER",
+          "BRAND_HYOSOW",
+          "BRAND_HYUNDAI",
+          "BRAND_IRANKHODRO_VAN",
+          "BRAND_ISUZU",
+          "BRAND_IVECO",
+          "BRAND_JAC",
+          "BRAND_JAGUAR",
+          "BRAND_JEEP",
+          "BRAND_JMC",
+          "BRAND_JOYLONG",
+          "BRAND_KIA",
+          "BRAND_KMC",
+          "BRAND_LADA",
+          "BRAND_LAMBORGHINI",
+          "BRAND_LAND_ROVER",
+          "BRAND_LANDMARK",
+          "BRAND_LEXUS",
+          "BRAND_LIFAN",
+          "BRAND_LOTUS",
+          "BRAND_LUXGEN",
+          "BRAND_MASERATI",
+          "BRAND_MAXUS",
+          "BRAND_MAZDA",
+          "BRAND_MERCEDESBENZ",
+          "BRAND_MG",
+          "BRAND_MINI",
+          "BRAND_MITSUBISHI",
+          "BRAND_MVM",
+          "BRAND_NARVAN",
+          "BRAND_NISSAN",
+          "BRAND_OLDSMOBILE",
+          "BRAND_OPEL",
+          "BRAND_PAYKAN",
+          "BRAND_PAZHAN",
+          "BRAND_PEUGEOT",
+          "BRAND_PONTIAC",
+          "BRAND_PORSCHE",
+          "BRAND_PRIDE",
+          "BRAND_PROTON",
+          "BRAND_QUICK",
+          "BRAND_RAYEN",
+          "BRAND_RENAULT",
+          "BRAND_RICH",
+          "BRAND_RIGAN",
+          "BRAND_RUNNA",
+          "BRAND_SAINA",
+          "BRAND_SAIPA",
+          "BRAND_SAMAND",
+          "BRAND_SEAT",
+          "BRAND_SHAHIN",
+          "BRAND_SINAD",
+          "BRAND_SMART",
+          "BRAND_SSANGYONG",
+          "BRAND_SUBARU",
+          "BRAND_SUZUKI",
+          "BRAND_SWM",
+          "BRAND_TARA",
+          "BRAND_TIBA",
+          "BRAND_TOYOTA",
+          "BRAND_UAZ",
+          "BRAND_VOLKSWAGEN",
+          "BRAND_VOLVO",
+          "BRAND_ZAMYAD",
+          "BRAND_ZOTYE",
+          "BRAND_SOUEAST",
+          "ARCHWAY",
+          "METRO",
+          "POI",
+          "STREET_SIGN",
+          "TREES",
+          "EARNEST",
+          "RESTAURANT",
+          "BACKPACK",
+          "STETHOSCOPE",
+          "MOSQUE",
+          "HOSPITAL",
+          "CAPSULE",
+          "BANK",
+          "CART",
+          "SHOPPING",
+          "BRAND_CHRYSLER",
+          "BRAND_DAIHATSU",
+          "BRAND_FOWNIX",
+          "BRAND_ROLLSROYCE",
+          "TUNE",
+          "EXCHANGE",
+          "BABY",
+          "BAGUETTE",
+          "BUS",
+          "COFFEE",
+          "FRUIT",
+          "GAS_STATION",
+          "GYM",
+          "HAMBURGER",
+          "HIGHWAY",
+          "MEDIC",
+          "SCHOOL_OUTLINE",
+          "TAXI",
+          "CAMERA",
+          "CAMERA_O",
+          "EYE_OFF",
+          "BRAND_DAYUN",
+          "BRAND_MAXMOTOR",
+          "VIDEOCAM",
+          "BRAND_ACER",
+          "BRAND_ALCATEL",
+          "BRAND_AMAZON",
+          "BRAND_APPLE",
+          "BRAND_ARCHOS",
+          "BRAND_ASUS",
+          "BRAND_BLACKBERRY",
+          "BRAND_BLU",
+          "BRAND_CATERPILLAR",
+          "BRAND_ENERGIZER",
+          "BRAND_GIGABYTE",
+          "BRAND_GIONEE",
+          "BRAND_GLX",
+          "BRAND_GOOGLE",
+          "BRAND_GPLUS",
+          "BRAND_HONOR",
+          "BRAND_HTC",
+          "BRAND_HUAWEI",
+          "BRAND_LENOVO",
+          "BRAND_LG",
+          "BRAND_MEIZU",
+          "BRAND_MICROMAX",
+          "BRAND_MICROSOFT",
+          "BRAND_MOTOROLA",
+          "BRAND_NOKIA",
+          "BRAND_ONEPLUS",
+          "BRAND_OPPO",
+          "BRAND_PANASONIC",
+          "BRAND_PHILIPS",
+          "BRAND_PIXEL",
+          "BRAND_PRESTIGIO",
+          "BRAND_RAZER",
+          "BRAND_REALME",
+          "BRAND_SAMSUNG",
+          "BRAND_SHARP",
+          "BRAND_SONY_ERICSSON",
+          "BRAND_SONY",
+          "BRAND_VERTU",
+          "BRAND_VIVO",
+          "BRAND_XIAOMI",
+          "BRAND_YOTA",
+          "BRAND_ZTE",
+          "BRAND_INROADS",
+          "VIDEOCAM_O",
+          "SHIELD_PHONE",
+          "SHIELD_PHONE_O",
+          "BRAND_LAMARI",
+          "VERIFIED_GREEN",
+          "CHART",
+          "CHART_O",
+          "LAUNCH",
+          "WALLET",
+          "TRASH_O",
+          "TRASH_F",
+          "BRAND_RESPECT",
+          "BRAND_TIGARD",
+          "FILE",
+          "FILE_O",
+          "IMAGE_OUTLINE_O",
+          "CONTACT_PHONE_O",
+          "PUZZLE",
+          "PUZZLE_OUTLINE",
+          "CALL_OUTGOING",
+          "CALL_INCOMING",
+          "CALL_MISSED",
+          "CALL_BLOCKED",
+          "ARCHIVE",
+          "ARCHIVE_O",
+          "CHAT_BUBBLE",
+          "CHAT_BUBBLE_F",
+          "MOBILE_1",
+          "MOBILE_2",
+          "MOBILE_3",
+          "MOBILE_4",
+          "MOBILE_5",
+          "MOBILE_6",
+          "MOBILE_7",
+          "CARPET_1",
+          "CARPET_2",
+          "CARPET_3",
+          "CARPET_4",
+          "CARPET_5",
+          "CARPET_6",
+          "SOFA_1",
+          "SOFA_2",
+          "SOFA_3",
+          "SOFA_4",
+          "SOFA_5",
+          "SOFA_6",
+          "LIGHTS_2",
+          "LIGHTS_1",
+          "LIGHTS_3",
+          "LIGHTS_4",
+          "LIGHTS_5",
+          "BATTERY_CHARGING",
+          "BATTERY_HORIZ_075",
+          "BATTERY_PROFILE",
+          "BUILD_CIRCLE",
+          "HEADPHONES",
+          "INVENTORY",
+          "SMARTPHONE",
+          "HOME_INSPECTION",
+          "MOBILE_INSPECTION",
+          "CAR_COLOR_BLUE",
+          "CAR_COLOR_CHERRY",
+          "CAR_COLOR_PERSIANBLUE",
+          "CAR_COLOR_EGGPLANT",
+          "CAR_COLOR_BRONZE",
+          "CAR_COLOR_BEIGE",
+          "CAR_COLOR_PURPLE",
+          "CAR_COLOR_ONIONSKIN",
+          "CAR_COLOR_TITANIUM",
+          "CAR_COLOR_GRAY",
+          "CAR_COLOR_KHAKI",
+          "CAR_COLOR_SLATEGRAY",
+          "CAR_COLOR_CHARCOAL",
+          "CAR_COLOR_YELLOW",
+          "CAR_COLOR_CRIMSON",
+          "CAR_COLOR_OLIVE",
+          "CAR_COLOR_GREEN",
+          "CAR_COLOR_LIGHTSLATEGRAY",
+          "CAR_COLOR_NAVYBLUE",
+          "CAR_COLOR_WHITE",
+          "CAR_COLOR_OYSTERWHITE",
+          "CAR_COLOR_GOLDEN",
+          "CAR_COLOR_LIGHTGRAY",
+          "CAR_COLOR_WARMGRAY",
+          "CAR_COLOR_JUJUBE",
+          "CAR_COLOR_RED",
+          "CAR_COLOR_BROWN",
+          "CAR_COLOR_CARBONBLACK",
+          "CAR_COLOR_DARKRED",
+          "CAR_COLOR_COPPER",
+          "CAR_COLOR_BLACK",
+          "CAR_COLOR_MOCHA",
+          "CAR_COLOR_ORANGE",
+          "CAR_COLOR_BLUESILVER",
+          "CAR_COLOR_SILVER",
+          "CAR_COLOR_DIMGRAY",
+          "CAR_COLOR_JADEGREEN",
+          "DIVAR_LOGO",
+          "CAR_COLOR_CREAM",
+          "CAR_FRONT_SIDE",
+          "CAR_BACK_SIDE",
+          "CAR_DRIVER_SIDE",
+          "CAR_PASSENGER_SIDE",
+          "CAR_ODOMETER",
+          "CRAFTSMEN",
+          "KITCHEN_UTENSILS",
+          "STOVES_HEATERS_FIREPLACES",
+          "TRAVEL_PACKAGES",
+          "WATER_HEATER_PACKAGE_RADIATOR",
+          "STAIRS",
+          "ACCESSIBILITY",
+          "MAP_VIEW",
+          "THUMB_DOWN",
+          "THUMB_UP",
+          "VIDEOCAM_PLUS",
+          "BADGE",
+          "BADGE_F",
+          "RADIO_BUTTON_UNCHECKED",
+          "POLICE",
+          "SORT_ASCENDING",
+          "BUSINESS_PERSONAL",
+          "BRAND_XTRIM",
+          "BRAND_BESTUNE",
+          "BRAND_GAC",
+          "BRAND_VENUCIA",
+          "BRAND_VGV",
+          "BRAND_ZX_AUTO",
+          "BRAND_QINGLING",
+          "BUSINESS_JOBS",
+          "SHIELD_CHECK_CIRCLE",
+          "SCRIPT_TEXT",
+          "DOT_INDICATOR",
+          "CLOCK",
+          "MAP_MARKER",
+          "TOMAN_SIGN",
+          "CHECK_DECOGRAM",
+          "LADDER",
+          "RUNNING_MAN",
+          "CALENDAR_TEXT",
+          "HOME",
+          "ADMINISTRATIVE_DOC",
+          "ANALOG_WATCH",
+          "ANKLE_BOOTS",
+          "BARTER",
+          "BOOTS",
+          "BRIEFCASE",
+          "CAPACITY",
+          "CARPET_DIMENSIONS",
+          "CHAIRS",
+          "CHANDELIER",
+          "COLOR_BEAKER",
+          "CONDITION",
+          "CONTROLLER",
+          "COSMETICS",
+          "CPU",
+          "DIGITAL_WATCH",
+          "DOOR",
+          "DRESS_SHOES",
+          "ELECTRICAL",
+          "FAKE_BADGE",
+          "FANNY_PACK",
+          "FURNITURE",
+          "FURNITURE_CLASSIC",
+          "FURNITURE_SOFA",
+          "HANDBAG",
+          "HDMI",
+          "HERBAL_PILLS",
+          "HOME_AREA",
+          "INSTALLMENT_SALE",
+          "IRANCELL",
+          "IRAN_MAP",
+          "JEWELRY_ANKLET",
+          "JEWELRY_BRACELET",
+          "JEWELRY_EARRINGS",
+          "JEWELRY_NECKLACE",
+          "JEWELRY_RING",
+          "JEWELRY_SET",
+          "LAN",
+          "LOAFERS",
+          "MAN",
+          "MAN_AND_WOMAN",
+          "MATERIAL",
+          "MCI",
+          "MEDICAL",
+          "MEMORY",
+          "MODEM",
+          "MONEY_BILLS",
+          "NINTENDO",
+          "ORIGINAL_BADGE",
+          "PAPER_DEED",
+          "PARKING_LOT",
+          "PERFUMES",
+          "PLAY_STATION",
+          "RAM",
+          "RECEIVING_HAND",
+          "RIGHTEL",
+          "SANDALS",
+          "SCISSORS",
+          "SCREEN_SIZE",
+          "SHAKING_HANDS",
+          "SHOULDER_BAG",
+          "SIDE_TABLE",
+          "SIM",
+          "SIM_HOLDER",
+          "SKIN_CARE",
+          "SLIPPERS",
+          "SMART_WATCH",
+          "SNEAKERS",
+          "SPEEDOMETER",
+          "SPORT_BAG",
+          "STAIRCASE",
+          "STORAGE",
+          "UMBRELLA",
+          "USB",
+          "WOMAN",
+          "WORLD_MAP",
+          "XBOX",
+          "SHIELD_CHECK",
+          "CAR",
+          "BUILDING",
+          "STOP_WATCH",
+          "CHATBOT",
+          "CHATBOT_OUTLINE",
+          "APARTMENT_RENT",
+          "APARTMENT_SELL",
+          "COMMERCIAL_RENT",
+          "COMMERCIAL_SELL",
+          "HOUSE_VILLA_RENT",
+          "HOUSE_VILLA_SELL",
+          "INDUSTRY_AGRICULTURE_BUSINESS_RENT",
+          "INDUSTRY_AGRICULTURE_BUSINESS_SELL",
+          "OFFICE_RENT",
+          "OFFICE_SELL",
+          "PARTNERSHIP",
+          "PLOT_OLD",
+          "PRESELL",
+          "REAL_ESTATE_SERVICES",
+          "RESIDENTIAL_RENT",
+          "RESIDENTIAL_SELL",
+          "SHOP_RENT",
+          "SHOP_SELL",
+          "SUITE_APARTMENT",
+          "TEMPORARY_RENT",
+          "VILLA",
+          "WORKSPACE",
+          "IMAGE_MULTIPLE",
+          "SHATEL_MOBILE",
+          "MEGAPHONE_F",
+          "MEGAPHONE",
+          "YEKTANET",
+          "TAPSELL",
+          "DAART",
+          "CLOSE_CIRCLE",
+          "CLOSE_CIRCLE_F",
+          "ACCESSORIES",
+          "ACCOUNTING_AND_FINANCE",
+          "ACCOUNTING_FINANCE_LEGAL",
+          "ADMINISTRATION_AND_HR",
+          "AIR_CONDITIONING_FAN_COIL",
+          "ANIMALS",
+          "APPLIANCE",
+          "ARTIFICIAL_FLOWER",
+          "AUDIO_VIDEO",
+          "BABY_AND_TOYS",
+          "BALL_SPORTS",
+          "BARBERSHOP_AND_BEAUTYSALON",
+          "BATCH",
+          "BATHROOMS",
+          "BATHROOM_ACCESSORIES",
+          "BEAUTY_AND_HAIRCARE",
+          "BED_PILLOW_BLANKET",
+          "BED_SERVICE",
+          "BED_SHEET",
+          "BICYCLE",
+          "BIRDS",
+          "BOAT",
+          "BOOKCASE_SHELF",
+          "BOOK_STUDENT_LITERATURE",
+          "BUFFET_SHOWCASES",
+          "BUILDING_EQUIPMENT",
+          "BUS_METRO_TRAIN",
+          "CAFE_AND_RESTAURANT",
+          "CAMERA_CAMCODERS",
+          "CAMPING_OUTDOOR",
+          "CARE_HEALTH_BEAUTY",
+          "CARPET",
+          "CARPET_MOQUETTE",
+          "CARS",
+          "CAR_AND_MOTOR",
+          "CAT",
+          "CATERING",
+          "CCTV",
+          "CHAIR_BENCH",
+          "CHANDELIERS",
+          "CHILDRENS_CLOTHING_AND_SHOE",
+          "CHILDRENS_FURNITURE",
+          "CHILD_CAR_SEAT",
+          "CLASSIC",
+          "CLEANING",
+          "CLEANING_SUPPLIES",
+          "CLOTHES_RACK",
+          "CLOTHING",
+          "CLOTHING_AND_SHOES",
+          "COIN_STAMP",
+          "COMPUTERS",
+          "COMPUTER_AND_IT",
+          "COMPUTER_AND_MOBILE",
+          "CONCERT",
+          "CONFERENCE_MEETING",
+          "CONSTRUCTION_CRAFT",
+          "CONTAINERS",
+          "CONTAINER_ORGANIZERS",
+          "COOKING_UTENSILS",
+          "CRAFTS",
+          "CURTAINS_TABLE_COVER",
+          "DECORATION",
+          "DESK",
+          "DESKTOPS",
+          "DETERGENT_TISSUE",
+          "DINING_TABLE",
+          "DISHWASHER",
+          "DIVING_WATERSPORTS",
+          "DOG",
+          "DRINK_MAKER",
+          "DRUMS_PERCUSSION",
+          "EDUCATION",
+          "EDUCATIONAL",
+          "EVENT",
+          "EVENTS_SPORTS",
+          "FAN_VENTILATOR_HUMIDIFIER",
+          "FARM_ANIMALS",
+          "FIGURINES",
+          "FISH",
+          "FISHING",
+          "FOOD_AND_DRINK",
+          "FOOD_MILL",
+          "FOR_SALE",
+          "FURNITURE_WOOD",
+          "GAME_CONSOLES_AND_VIDEO_GAMES",
+          "GARDEN_AND_LANDSCAPING",
+          "GIFT_CERTIFICATE",
+          "GUITAR_BASS_AMPLIFIER",
+          "HEALTH_BEAUTY",
+          "HEAVY",
+          "HISTORICAL",
+          "HISTORICAL_OBJECTS",
+          "HOBBY_COLLECTIBLES",
+          "HOME_CATERING",
+          "HOME_LIGHTING",
+          "HORSES_EQUESTRIAN",
+          "INDUSTRIAL_MACHINERY",
+          "INDUSTRIAL_TECHNOLOGY",
+          "JANITORIAL_CLEANING",
+          "JEWELRY",
+          "JEWELRY_AND_WATCHES",
+          "JUICERS",
+          "LAMPS",
+          "LAMPSHADE",
+          "LAPTOPS",
+          "LEISURE_HOBBIES_TOYS",
+          "LIGHT",
+          "LITERARY",
+          "LOST_AND_FOUND",
+          "LOST_ANIMALS",
+          "LOST_THINGS",
+          "LUMBAR_PILLOW",
+          "MAGAZINES",
+          "MAT",
+          "MATTRESS",
+          "MEDIA_ADVERTISING",
+          "MEDICAL_EQUIPMENT",
+          "MIRROR",
+          "MOBILE_PHONES",
+          "MOBILE_TABLET",
+          "MOBILE_TABLET_ACCESSORIES",
+          "MODEM_AND_NETWORK_EQUIPMENT",
+          "MOQUETTE",
+          "MOTORCYCLES",
+          "MOVIES_AND_MUSIC",
+          "MP3_PLAYER",
+          "MUSICAL_INSTRUMENTS",
+          "NATURAL_PLANTS",
+          "OFFICES",
+          "OFFICE_DECORATION",
+          "OTHER_APPLIANCES",
+          "OVEN_BAKING_APPLIANCES",
+          "PAINTINGS_PICTURE",
+          "PARTS_ACCESSORIES",
+          "PARTS_AND_ACCESSORIES",
+          "PERSONAL_TOYS",
+          "PHONE_DESK",
+          "PIANO_KEYBOARD",
+          "PICTORIAL_CARPET",
+          "POT_KETTLE",
+          "PRINTER_SCANER_COPIER",
+          "RANGE_HOOD",
+          "REFRIGERATOR_FREEZER",
+          "RELIGIOUS",
+          "RENTAL",
+          "REPTILE",
+          "RESEARCH",
+          "RHINESTONES",
+          "RODENTS_RABBITS",
+          "RUBBER_CARPET",
+          "RUGS_WOOLEN_CLOTH",
+          "SALES_MARKETING",
+          "SEWING_ACCESSORIES",
+          "SEWING_KNITTING",
+          "SEWING_MACHINE",
+          "SHOES_BELT_BAG",
+          "SHOE_RACK_DRAWER",
+          "SHOP_AND_CASH",
+          "SHOP_RESTAURANT",
+          "SIM_CARD",
+          "SLEEP_GOODS",
+          "SPORT",
+          "SPORT_LEISURE",
+          "STATIONERY",
+          "STEAM_IRON",
+          "STEREO_SURROUND",
+          "STROLLERS_AND_ACCESSORIES",
+          "TABLECLOTHS",
+          "TABLET",
+          "TEACHING",
+          "THEATRE_AND_CINEMA",
+          "TICKET",
+          "TICKETS_SPORTS",
+          "TOOLBOX",
+          "TRADITIONAL",
+          "TRAINING",
+          "TRANSPORT",
+          "TRANSPORTATION",
+          "TV_PROJECTOR",
+          "TV_STAND",
+          "VACUUMS_CLEANER",
+          "VENTILATION_COOLING_HEATING",
+          "VIDEO_DVDPLAYER",
+          "VIOLINS",
+          "VOLUNTEERS",
+          "WALL_CLOCK",
+          "WASHING_CLEANING",
+          "WASHING_MACHINES",
+          "WATCHES",
+          "WATER_COOLER",
+          "WATER_COOLER_REFINERY",
+          "WC_ACCESSORIES",
+          "WIND",
+          "WINTER_SPORTS",
+          "WORK_EQUIPMENT",
+          "YARN_LIGHTS",
+          "ARTICLE_MAGNIFIER",
+          "ARTICLE_MAGNIFIER_F"
+        ]
+      },
+      "GetPostPricingResponseReorder": {
+        "type": "object",
+        "properties": {
+          "cost_rials": {
+            "type": "string",
+            "description": "قیمت نردبان به ریال.",
+            "format": "int64"
+          }
+        }
+      },
+      "GetServiceTypesResponseServiceTypeData": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "$ref": "#/components/schemas/appsServiceType"
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      },
+      "GetUserPostsResponsePost": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "category": {
+            "type": "string"
+          }
+        }
+      },
+      "ImageCarouselRowImageItem": {
+        "type": "object",
+        "properties": {
+          "image_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "MessageFileData": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size_bytes": {
+            "type": "string",
+            "format": "uint64"
+          }
+        }
+      },
+      "MessageImageData": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "size_bytes": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "height_px": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "width_px": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "MessageLocationData": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "description": "The latitude in degrees. It must be in the range [-90.0, +90.0].",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "description": "The longitude in degrees. It must be in the range [-180.0, +180.0].",
+            "format": "double"
+          }
+        }
+      },
+      "MessageSender": {
+        "type": "object",
+        "properties": {
+          "side": {
+            "$ref": "#/components/schemas/chatapiMessageSenderSide"
+          },
+          "type": {
+            "$ref": "#/components/schemas/chatapiMessageSenderType"
+          }
+        }
+      },
+      "MessageVideoData": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "thumbnail_link": {
+            "type": "string"
+          },
+          "size_bytes": {
+            "type": "string",
+            "format": "uint64"
+          }
+        }
+      },
+      "MessageVoiceData": {
+        "type": "object",
+        "properties": {
+          "link": {
+            "type": "string"
+          },
+          "size_bytes": {
+            "type": "string",
+            "format": "uint64"
+          }
+        }
+      },
+      "OAuthScopeScope": {
+        "type": "string",
+        "enum": [
+          "POST_ADDON_CREATE",
+          "USER_PHONE",
+          "USER_ID",
+          "USER_ADDON_CREATE",
+          "CHAT_MESSAGE_SEND",
+          "CHAT_CONVERSATION_READ",
+          "USER_POSTS_GET",
+          "CHAT_POST_CONVERSATIONS_READ",
+          "CHAT_POST_CONVERSATIONS_MESSAGE_SEND",
+          "CHAT_SUPPLIER_ALL_CONVERSATIONS_READ",
+          "CHAT_SUPPLIER_ALL_CONVERSATIONS_MESSAGE_SEND",
+          "USER_VERIFICATION_CREATE",
+          "OFFLINE_ACCESS",
+          "PAYMENT_ALL_POSTS_PRICING_READ",
+          "PAYMENT_ALL_POSTS_REORDER",
+          "MANAGEMENT_APPS_READ",
+          "MANAGEMENT_APPS_WRITE",
+          "POST_ONGOING_IMAGES_GET",
+          "USER_POSTS_ADDON_CREATE",
+          "POST_EDIT",
+          "CONVERSATION_SEND_MESSAGE",
+          "BUSINESS_ADDON_CREATE",
+          "POST_SEMANTIC_CREATE",
+          "NOTIFICATION_ACCESS_REVOCATION"
+        ]
+      },
+      "PaymentReorderPostBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "یک uuid ورژن ۴ که باید برای هر پرداخت متمایز باشد. این uuid را باید سمت خودتان بسازید و در رکوئست ارسال کنید. در صورت ارسال id ای که سمت کنار با آن تراکنش موفق یا نیمه موفق موجود باشد، خطا دریافت میکنید."
+          },
+          "extra_details": {
+            "type": "string",
+            "description": "در این بخش میتوانید اطلاعات اضافی (مانند شماره تراکنش بین سرویس خودتان و کاربر) را قرار دهید. این فیلد برای رفع مغایرت کاربرد دارد."
+          }
+        }
+      },
+      "PostEditPostBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "image_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SearchPostItemCommunityFields": {
+        "type": "object"
+      },
+      "SearchPostItemElectronicDevicesFields": {
+        "type": "object"
+      },
+      "SearchPostItemHomeKitchenFields": {
+        "type": "object"
+      },
+      "SearchPostItemJobsFields": {
+        "type": "object"
+      },
+      "SearchPostItemLeisureHobbiesFields": {
+        "type": "object"
+      },
+      "SearchPostItemPersonalGoodsFields": {
+        "type": "object"
+      },
+      "SearchPostItemPrice": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string",
+            "format": "uint64"
+          }
+        }
+      },
+      "SearchPostItemRealEstateFields": {
+        "type": "object",
+        "properties": {
+          "credit": {
+            "$ref": "#/components/schemas/SearchPostItemPrice"
+          },
+          "rent": {
+            "$ref": "#/components/schemas/SearchPostItemPrice"
+          },
+          "daily_rent": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "has_parking": {
+            "type": "boolean"
+          },
+          "has_elevator": {
+            "type": "boolean"
+          },
+          "rooms": {
+            "type": "string"
+          },
+          "floor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SearchPostItemServicesFields": {
+        "type": "object"
+      },
+      "SearchPostItemToolsMaterialsEquipmentFields": {
+        "type": "object"
+      },
+      "SearchPostItemVehiclesFields": {
+        "type": "object",
+        "properties": {
+          "usage": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "installment_sale": {
+            "type": "string"
+          },
+          "custom_post_subtitle": {
+            "type": "string"
+          }
+        }
+      },
+      "SemanticCreatePostSemanticBody": {
+        "type": "object",
+        "properties": {
+          "semantic": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "ticket_uuid": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SemanticCreateUserSemanticBody": {
+        "type": "object",
+        "properties": {
+          "semantic": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "ticket_uuid": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "addonsAction": {
+        "type": "object",
+        "properties": {
+          "open_direct_link": {
+            "type": "string"
+          },
+          "open_server_link": {
+            "$ref": "#/components/schemas/addonsOpenServerLink"
+          }
+        }
+      },
+      "addonsAddonLinkage": {
+        "type": "string",
+        "enum": [
+          "POST_DETAILS",
+          "POST_MANAGEMENT"
+        ]
+      },
+      "addonsAddonMetaData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "app": {
+            "$ref": "#/components/schemas/appsApp"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/addonsStatus"
+          }
+        }
+      },
+      "addonsAddonSecondaryLinkage": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "$ref": "#/components/schemas/AddonSecondaryLinkagePosition"
+          },
+          "widgets": {
+            "$ref": "#/components/schemas/addonsWidgets"
+          }
+        }
+      },
+      "addonsAddonSecondaryLinks": {
+        "type": "object",
+        "properties": {
+          "secondary_linkages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/addonsAddonSecondaryLinkage"
+            }
+          }
+        }
+      },
+      "addonsAddonSelector": {
+        "title": "(AND) post is selected by this selector if all of the following conditions matches",
+        "type": "object",
+        "properties": {
+          "tokens": {
+            "title": "(OR) post is selected if the following array contains corresponding field",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "districts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "brand_models": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "addonsAddonSemantic": {
+        "type": "object",
+        "properties": {
+          "payment_method": {
+            "$ref": "#/components/schemas/AddonSemanticPaymentMethod"
+          },
+          "identity_verification_result": {
+            "$ref": "#/components/schemas/AddonSemanticIdentityVerificationResult"
+          },
+          "post_verification_result": {
+            "$ref": "#/components/schemas/AddonSemanticPostVerificationResult"
+          },
+          "status": {
+            "$ref": "#/components/schemas/addonsAddonSemanticStatus"
+          },
+          "identity_verification_last_successful_stage": {
+            "$ref": "#/components/schemas/AddonSemanticIdentityVerificationStage"
+          },
+          "identity_verification_failure_reason": {
+            "$ref": "#/components/schemas/AddonSemanticIdentityVerificationStage"
+          },
+          "car_verification_last_successful_stage": {
+            "$ref": "#/components/schemas/AddonSemanticCarVerificationStage"
+          },
+          "car_verification_failure_reason": {
+            "$ref": "#/components/schemas/AddonSemanticCarVerificationStage"
+          },
+          "ownership_result": {
+            "$ref": "#/components/schemas/AddonSemanticOwnershipResult"
+          },
+          "inspection_result": {
+            "$ref": "#/components/schemas/AddonSemanticInspectionResult"
+          }
+        },
+        "description": "This is the message extracted by OpenPlatform from service provider\nsemantics. Guidelines:\n - Always check to see if an appropriate enum field or value exists before\n adding one.\n - Zero value of every enum should be {ENUM_NAME}_UNSPECIFIED.\n - Enum values should not correspond to any specific post or person\n attribute."
+      },
+      "addonsAddonSemanticStatus": {
+        "type": "string",
+        "enum": [
+          "SUCCEEDED",
+          "FAILED",
+          "EXPIRED"
+        ]
+      },
+      "addonsBackFillBusinessAddonResponse": {
+        "type": "object"
+      },
+      "addonsButtonBar": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "action": {
+            "$ref": "#/components/schemas/addonsAction"
+          }
+        }
+      },
+      "addonsCreatePostAddonRequest": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "widgets": {
+            "$ref": "#/components/schemas/addonsWidgets"
+          },
+          "selector": {
+            "$ref": "#/components/schemas/addonsAddonSelector"
+          },
+          "link_in_spec": {
+            "type": "string"
+          },
+          "notes": {
+            "title": "arbitrary data provided by addon creator",
+            "type": "string"
+          },
+          "semantic": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "semantic_sensitives": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "addonsCreatePostAddonResponseV2": {
+        "type": "object"
+      },
+      "addonsCreateUserAddonResponseV2": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "addonsDescriptionRow": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "has_divider": {
+            "type": "boolean"
+          },
+          "expandable": {
+            "type": "boolean"
+          }
+        }
+      },
+      "addonsEvaluationRow": {
+        "type": "object",
+        "properties": {
+          "indicator_text": {
+            "type": "string"
+          },
+          "indicator_percentage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "icon_name": {
+            "$ref": "#/components/schemas/DivarIconsIconName"
+          },
+          "left": {
+            "$ref": "#/components/schemas/addonsEvaluationRowSection"
+          },
+          "middle": {
+            "$ref": "#/components/schemas/addonsEvaluationRowSection"
+          },
+          "right": {
+            "$ref": "#/components/schemas/addonsEvaluationRowSection"
+          }
+        }
+      },
+      "addonsEvaluationRowSection": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "section_color": {
+            "$ref": "#/components/schemas/addonsWidgetColor"
+          }
+        }
+      },
+      "addonsEventRow": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "image_id": {
+            "type": "string"
+          },
+          "has_divider": {
+            "type": "boolean"
+          },
+          "icon_name": {
+            "$ref": "#/components/schemas/DivarIconsIconName"
+          }
+        }
+      },
+      "addonsGetPostAddonsResponse": {
+        "type": "object",
+        "properties": {
+          "addons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/addonsPostAddon"
+            }
+          }
+        }
+      },
+      "addonsGetUserAddonsResponse": {
+        "type": "object",
+        "properties": {
+          "addons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/addonsUserAddon"
+            }
+          }
+        }
+      },
+      "addonsGetUserPostAddonsResponse": {
+        "type": "object",
+        "properties": {
+          "addons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/addonsPostAddon"
+            }
+          }
+        }
+      },
+      "addonsGroupInfoRow": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/addonsGroupInfoRowGroupInfoItem"
+            }
+          },
+          "has_divider": {
+            "type": "boolean"
+          }
+        }
+      },
+      "addonsGroupInfoRowGroupInfoItem": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "addonsImageCarouselRow": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageCarouselRowImageItem"
+            }
+          },
+          "has_divider": {
+            "type": "boolean"
+          }
+        }
+      },
+      "addonsOpenServerLink": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "addonsPostAddon": {
+        "type": "object",
+        "properties": {
+          "meta_data": {
+            "$ref": "#/components/schemas/addonsAddonMetaData"
+          },
+          "token": {
+            "type": "string"
+          },
+          "app": {
+            "$ref": "#/components/schemas/appsApp"
+          },
+          "widgets": {
+            "$ref": "#/components/schemas/addonsWidgets"
+          },
+          "score": {
+            "type": "string",
+            "format": "int64"
+          },
+          "selector": {
+            "$ref": "#/components/schemas/addonsAddonSelector"
+          },
+          "linkage": {
+            "$ref": "#/components/schemas/addonsAddonLinkage"
+          },
+          "secondary_links": {
+            "$ref": "#/components/schemas/addonsAddonSecondaryLinks"
+          },
+          "semantic": {
+            "title": "deprecated",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "semantic_data": {
+            "$ref": "#/components/schemas/addonsAddonSemantic"
+          },
+          "sensitive_semantic": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "widgets_semantic": {
+            "type": "object",
+            "properties": {}
+          },
+          "semantic_sensitives": {
+            "title": "deprecated",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "addonsScoreRow": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "descriptive_score": {
+            "type": "string"
+          },
+          "percentage_score": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "score_color": {
+            "$ref": "#/components/schemas/addonsWidgetColor"
+          },
+          "has_divider": {
+            "type": "boolean"
+          },
+          "icon_name": {
+            "$ref": "#/components/schemas/DivarIconsIconName"
+          },
+          "action": {
+            "$ref": "#/components/schemas/addonsAction"
+          }
+        }
+      },
+      "addonsSelectorRow": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "image_id": {
+            "type": "string"
+          },
+          "has_divider": {
+            "type": "boolean"
+          },
+          "icon_name": {
+            "$ref": "#/components/schemas/DivarIconsIconName"
+          },
+          "action": {
+            "$ref": "#/components/schemas/addonsAction"
+          }
+        }
+      },
+      "addonsSendAddonDeletionEventsResponse": {
+        "type": "object"
+      },
+      "addonsStatus": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "HIDDEN",
+          "DELETED"
+        ]
+      },
+      "addonsSubtitleRow": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "has_divider": {
+            "type": "boolean"
+          }
+        }
+      },
+      "addonsTitleRow": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "has_divider": {
+            "type": "boolean"
+          }
+        }
+      },
+      "addonsUserAddon": {
+        "type": "object",
+        "properties": {
+          "meta_data": {
+            "$ref": "#/components/schemas/addonsAddonMetaData"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "widgets": {
+            "$ref": "#/components/schemas/addonsWidgets"
+          },
+          "semantic": {
+            "title": "deprecated",
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "semantic_data": {
+            "$ref": "#/components/schemas/addonsAddonSemantic"
+          },
+          "sensitive_semantic": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "widgets_semantic": {
+            "type": "object",
+            "properties": {}
+          },
+          "filters": {
+            "$ref": "#/components/schemas/addonsUserAddonFilters"
+          }
+        }
+      },
+      "addonsUserAddonFilters": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "addonsWidget": {
+        "type": "object",
+        "properties": {
+          "event_row": {
+            "$ref": "#/components/schemas/addonsEventRow"
+          },
+          "button_bar": {
+            "$ref": "#/components/schemas/addonsButtonBar"
+          },
+          "title_row": {
+            "$ref": "#/components/schemas/addonsTitleRow"
+          },
+          "subtitle_row": {
+            "$ref": "#/components/schemas/addonsSubtitleRow"
+          },
+          "selector_row": {
+            "$ref": "#/components/schemas/addonsSelectorRow"
+          },
+          "score_row": {
+            "$ref": "#/components/schemas/addonsScoreRow"
+          },
+          "image_carousel_row": {
+            "$ref": "#/components/schemas/addonsImageCarouselRow"
+          },
+          "group_info_row": {
+            "$ref": "#/components/schemas/addonsGroupInfoRow"
+          },
+          "evaluation_row": {
+            "$ref": "#/components/schemas/addonsEvaluationRow"
+          },
+          "description_row": {
+            "$ref": "#/components/schemas/addonsDescriptionRow"
+          },
+          "semantic_paths": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "addonsWidgetColor": {
+        "type": "string",
+        "enum": [
+          "WARNING_SECONDARY",
+          "WARNING_PRIMARY",
+          "ERROR_PRIMARY",
+          "SUCCESS_PRIMARY",
+          "SUCCESS_SECONDARY"
+        ]
+      },
+      "addonsWidgets": {
+        "type": "object"
+      },
+      "appsApp": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "divar_identification_key": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/appsAppStatus"
+          },
+          "service_type": {
+            "$ref": "#/components/schemas/appsServiceType"
+          },
+          "service_tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/appsServiceTag"
+            }
+          }
+        }
+      },
+      "appsAppStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/appsAppStatusStatus"
+          }
+        }
+      },
+      "appsAppStatusStatus": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "INACTIVE",
+          "SUSPENDED",
+          "DEVELOPMENT"
+        ]
+      },
+      "appsServiceTag": {
+        "type": "string",
+        "enum": [
+          "VERIFIED",
+          "IDENTITY_VERIFIED",
+          "POST_VERIFIED",
+          "SECURE_PAYMENT",
+          "POST_OWNERSHIP_VERIFIED",
+          "EXPERT_INSPECTED",
+          "CAR_EXPERT_INSPECTED",
+          "HOME_EXPERT_INSPECTED",
+          "MOBILE_EXPERT_INSPECTED"
+        ]
+      },
+      "appsServiceType": {
+        "type": "string",
+        "enum": [
+          "FUNC_CLICK_AND_COLLECT",
+          "FUNC_DELIVERY",
+          "FUNC_SECURE_PAYMENT",
+          "LEAD_GEN_PURE",
+          "LEAD_GEN_LOAN",
+          "REPORT_INSPECTION",
+          "REPORT_PRICE_EVALUATION",
+          "REPORT_VERIFICATION",
+          "FUNC_CONTRACT",
+          "FUNC_FINANCING",
+          "USER_FACE_ID_VERIFICATION",
+          "POST_VERIFICATION",
+          "INTERNAL",
+          "USER_BACKGROUND_VERIFICATION",
+          "USER_BUSINESS_VERIFICATION",
+          "CHARITY",
+          "SECURE_PAYMENT_POST_PROMOTION",
+          "PHOTOGRAPHY",
+          "DOWNLOADABLE_CONTENT_GENERATION",
+          "REPORT_INSPECTION_CHAT",
+          "ADDITIONAL_INFORMATION",
+          "ACCOUNTING",
+          "ASSISTANT",
+          "ADVERTISEMENT",
+          "CONTRACT_POST",
+          "SITE_BUILDER",
+          "FORM_BUILDER",
+          "AUCTION"
+        ]
+      },
+      "assetsEnumOption": {
+        "type": "object",
+        "properties": {
+          "display": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          }
+        }
+      },
+      "assetsGetBodyStatusesResponse": {
+        "type": "object",
+        "properties": {
+          "body_status": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsEnumOption"
+            }
+          }
+        }
+      },
+      "assetsGetBrandModelsResponse": {
+        "type": "object",
+        "properties": {
+          "brand_models": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsEnumOption"
+            }
+          }
+        }
+      },
+      "assetsGetCategoriesResponse": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsEnumOption"
+            }
+          }
+        }
+      },
+      "assetsGetCitiesResponse": {
+        "type": "object",
+        "properties": {
+          "cities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsEnumOption"
+            }
+          }
+        }
+      },
+      "assetsGetColorsResponse": {
+        "type": "object",
+        "properties": {
+          "colors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsEnumOption"
+            }
+          }
+        }
+      },
+      "assetsGetDistrictsResponse": {
+        "type": "object",
+        "properties": {
+          "districts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsEnumOption"
+            }
+          }
+        }
+      },
+      "assetsGetInternalStoragesResponse": {
+        "type": "object",
+        "properties": {
+          "internal_storages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsEnumOption"
+            }
+          }
+        }
+      },
+      "assetsGetOAuthScopesResponse": {
+        "type": "object",
+        "properties": {
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsGetOAuthScopesResponseAppOauthScope"
+            }
+          }
+        }
+      },
+      "assetsGetOAuthScopesResponseAppOauthScope": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "$ref": "#/components/schemas/OAuthScopeScope"
+          },
+          "display": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "lifecycle_state": {
+            "$ref": "#/components/schemas/assetsGetOAuthScopesResponseLifeCycleState"
+          }
+        }
+      },
+      "assetsGetOAuthScopesResponseLifeCycleState": {
+        "type": "string",
+        "enum": [
+          "EXPERIMENTAL",
+          "ACTIVE",
+          "DEPRECATING_SOON",
+          "DEPRECATED"
+        ]
+      },
+      "assetsGetPermissionsResponse": {
+        "type": "object",
+        "properties": {
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsGetPermissionsResponsePermission"
+            }
+          }
+        }
+      },
+      "assetsGetPermissionsResponseLifeCycleState": {
+        "type": "string",
+        "enum": [
+          "EXPERIMENTAL",
+          "ACTIVE",
+          "DEPRECATING_SOON",
+          "DEPRECATED"
+        ]
+      },
+      "assetsGetPermissionsResponsePermission": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "lifecycle_state": {
+            "$ref": "#/components/schemas/assetsGetPermissionsResponseLifeCycleState"
+          }
+        }
+      },
+      "assetsGetRamMemoriesResponse": {
+        "type": "object",
+        "properties": {
+          "ram_memories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetsEnumOption"
+            }
+          }
+        }
+      },
+      "assetsGetServiceTypesResponse": {
+        "type": "object",
+        "properties": {
+          "service_types": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetServiceTypesResponseServiceTypeData"
+            }
+          }
+        }
+      },
+      "authorizationAPICallerInfo": {
+        "type": "object",
+        "properties": {
+          "api_key_id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "app": {
+            "$ref": "#/components/schemas/appsApp"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/authorizationOAuthScope"
+            }
+          },
+          "api_key_id_v2": {
+            "type": "string"
+          }
+        }
+      },
+      "authorizationOAuthScope": {
+        "title": "Represents standard oauth scope parsed using `PERMISSION_ENUM__{resource_id}` format string. e.g. EDIT_POST__AZrOi1eL",
+        "type": "object",
+        "properties": {
+          "resource_id": {
+            "type": "string"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/OAuthScopeScope"
+          }
+        }
+      },
+      "chatapiChatBotSendMessageResponse": {
+        "type": "object"
+      },
+      "chatapiChatButton": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "$ref": "#/components/schemas/addonsAction"
+          },
+          "icon_name": {
+            "title": "deprecated",
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/DivarIconsIconName"
+          }
+        }
+      },
+      "chatapiChatButtonGrid": {
+        "type": "object",
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/chatapiChatButtonRow"
+            }
+          }
+        }
+      },
+      "chatapiChatButtonRow": {
+        "type": "object",
+        "properties": {
+          "buttons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/chatapiChatButton"
+            }
+          }
+        }
+      },
+      "chatapiConversation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/chatapiConversationType"
+          },
+          "post_token": {
+            "type": "string"
+          }
+        }
+      },
+      "chatapiConversationSendMessageResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "chatapiConversationType": {
+        "type": "string",
+        "enum": [
+          "POST",
+          "BOT"
+        ]
+      },
+      "chatapiGetConversationResponse": {
+        "type": "object",
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/chatapiConversation"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/chatapiMessage"
+            }
+          }
+        }
+      },
+      "chatapiMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "conversation": {
+            "$ref": "#/components/schemas/chatapiConversation"
+          },
+          "sender": {
+            "$ref": "#/components/schemas/MessageSender"
+          },
+          "type": {
+            "$ref": "#/components/schemas/chatapiMessageType"
+          },
+          "sent_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "text": {
+            "type": "string"
+          },
+          "image_data": {
+            "$ref": "#/components/schemas/MessageImageData"
+          },
+          "file_data": {
+            "$ref": "#/components/schemas/MessageFileData"
+          },
+          "voice_data": {
+            "$ref": "#/components/schemas/MessageVoiceData"
+          },
+          "location_data": {
+            "$ref": "#/components/schemas/MessageLocationData"
+          },
+          "video_data": {
+            "$ref": "#/components/schemas/MessageVideoData"
+          }
+        }
+      },
+      "chatapiMessageSenderSide": {
+        "type": "string",
+        "enum": [
+          "BUYER",
+          "SELLER"
+        ]
+      },
+      "chatapiMessageSenderType": {
+        "type": "string",
+        "enum": [
+          "HUMAN",
+          "BOT"
+        ]
+      },
+      "chatapiMessageType": {
+        "type": "string",
+        "enum": [
+          "TEXT",
+          "IMAGE",
+          "FILE",
+          "VOICE",
+          "LOCATION",
+          "VIDEO"
+        ]
+      },
+      "chatplatformBotButton": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/BotButtonButtonData"
+          },
+          "action": {
+            "$ref": "#/components/schemas/chatplatformBotButtonAction"
+          }
+        }
+      },
+      "chatplatformBotButtonAction": {
+        "type": "string",
+        "enum": [
+          "LINK",
+          "DIRECT_LINK"
+        ]
+      },
+      "chatplatformBotSendMessageRequest": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/chatplatformMessageType"
+          },
+          "message": {
+            "type": "string"
+          },
+          "buttons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/chatplatformBotButton"
+            }
+          }
+        }
+      },
+      "chatplatformBotSendMessageResponse": {
+        "type": "object"
+      },
+      "chatplatformMessageType": {
+        "type": "string",
+        "enum": [
+          "TEXT"
+        ]
+      },
+      "chatplatformSendMessageV2Request": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "peer_id": {
+            "type": "string"
+          },
+          "post_token": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/chatplatformMessageType"
+          },
+          "message": {
+            "type": "string"
+          },
+          "sender_btn": {
+            "$ref": "#/components/schemas/chatplatformBotButton"
+          },
+          "receiver_btn": {
+            "$ref": "#/components/schemas/chatplatformBotButton"
+          }
+        }
+      },
+      "chatplatformSendMessageV2Response": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "eventsRegisterEventSubscriptionRequest": {
+        "type": "object",
+        "properties": {
+          "event_type": {
+            "$ref": "#/components/schemas/eventsRegisterEventSubscriptionRequestEventType"
+          },
+          "event_resource_id": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "eventsRegisterEventSubscriptionRequestEventType": {
+        "type": "string",
+        "enum": [
+          "NEW_MESSAGE_ON_POST"
+        ]
+      },
+      "eventsRegisterEventSubscriptionResponse": {
+        "type": "object"
+      },
+      "finderGetAllDevelopmentPostsResponse": {
+        "type": "object",
+        "properties": {
+          "development_posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/managementDevelopmentPost"
+            }
+          }
+        }
+      },
+      "finderGetPostResponse": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/finderPostExtState"
+          },
+          "first_published_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "token": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "finderGetUserPostsResponse": {
+        "type": "object",
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetUserPostsResponsePost"
+            }
+          }
+        }
+      },
+      "finderGetUserRequest": {
+        "type": "object"
+      },
+      "finderPostExtState": {
+        "type": "string",
+        "enum": [
+          "PUBLISHED",
+          "REVIEW_REQ",
+          "PAYMENT_REQ",
+          "RETIRED"
+        ]
+      },
+      "finderSearchPostItem": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "last_modified_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "city": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "price": {
+            "$ref": "#/components/schemas/SearchPostItemPrice"
+          },
+          "real_estate_fields": {
+            "$ref": "#/components/schemas/SearchPostItemRealEstateFields"
+          },
+          "vehicles_fields": {
+            "$ref": "#/components/schemas/SearchPostItemVehiclesFields"
+          },
+          "electronic_devices_fields": {
+            "$ref": "#/components/schemas/SearchPostItemElectronicDevicesFields"
+          },
+          "home_kitchen_fields": {
+            "$ref": "#/components/schemas/SearchPostItemHomeKitchenFields"
+          },
+          "services_fields": {
+            "$ref": "#/components/schemas/SearchPostItemServicesFields"
+          },
+          "personal_goods_fields": {
+            "$ref": "#/components/schemas/SearchPostItemPersonalGoodsFields"
+          },
+          "leisure_hobbies_fields": {
+            "$ref": "#/components/schemas/SearchPostItemLeisureHobbiesFields"
+          },
+          "community_fields": {
+            "$ref": "#/components/schemas/SearchPostItemCommunityFields"
+          },
+          "tools_materials_equipment_fields": {
+            "$ref": "#/components/schemas/SearchPostItemToolsMaterialsEquipmentFields"
+          },
+          "jobs_fields": {
+            "$ref": "#/components/schemas/SearchPostItemJobsFields"
+          }
+        }
+      },
+      "finderSearchPostRequest": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "districts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "category": {
+            "type": "string"
+          },
+          "query": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "finderSearchPostResponse": {
+        "type": "object",
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      },
+      "finderSearchPostV2Response": {
+        "type": "object",
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/finderSearchPostItem"
+            }
+          }
+        }
+      },
+      "finderSearchPostsV2Request": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "districts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "query": {
+            "$ref": "#/components/schemas/finderSearchQuery"
+          }
+        }
+      },
+      "finderSearchQuery": {
+        "type": "object",
+        "properties": {
+          "brand_model": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "production_year": {
+            "$ref": "#/components/schemas/finderSearchQueryNumberRange"
+          },
+          "usage": {
+            "$ref": "#/components/schemas/finderSearchQueryNumberRange"
+          },
+          "rooms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rent": {
+            "$ref": "#/components/schemas/finderSearchQueryNumberRange"
+          },
+          "credit": {
+            "$ref": "#/components/schemas/finderSearchQueryNumberRange"
+          },
+          "size": {
+            "$ref": "#/components/schemas/finderSearchQueryNumberRange"
+          },
+          "only_with_parking": {
+            "type": "boolean"
+          }
+        }
+      },
+      "finderSearchQueryNumberRange": {
+        "type": "object",
+        "properties": {
+          "min": {
+            "type": "string",
+            "format": "int64"
+          },
+          "max": {
+            "type": "string",
+            "format": "int64"
+          }
+        }
+      },
+      "finderUser": {
+        "type": "object",
+        "properties": {
+          "phone_numbers": {
+            "title": "requires OAuth scope: USER_PHONE",
+            "type": "array",
+            "description": "deprecated",
+            "items": {
+              "type": "string"
+            }
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      },
+      "googlerpcStatus": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/protobufAny"
+            }
+          }
+        }
+      },
+      "managementDevelopmentPost": {
+        "type": "object",
+        "properties": {
+          "preset": {
+            "$ref": "#/components/schemas/managementPreset"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "token": {
+            "type": "string"
+          },
+          "mng_token": {
+            "type": "string"
+          }
+        }
+      },
+      "managementPreset": {
+        "type": "string",
+        "enum": [
+          "LIGHT",
+          "CRAFTSMEN",
+          "MOBILE_PHONES",
+          "APARTMENT_SELL"
+        ]
+      },
+      "paymentGetPostPricingResponse": {
+        "type": "object",
+        "properties": {
+          "reorder": {
+            "$ref": "#/components/schemas/GetPostPricingResponseReorder"
+          }
+        }
+      },
+      "paymentReorderPostResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "همان uuid که در هنگام ساخت ارائه شده بود."
+          },
+          "cost_rials": {
+            "type": "string",
+            "description": "هزینه‌ای که این نردبان برای اپ شما داشت.",
+            "format": "int64"
+          }
+        }
+      },
+      "payment_ticketGenerateResponse": {
+        "type": "object",
+        "properties": {
+          "ticket_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "payment_ticketValidateRequest": {
+        "type": "object",
+        "properties": {
+          "ticket_uuid": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Deprecated. Use divar_user_id."
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "service_cost": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "payment_ticketValidateResponse": {
+        "type": "object",
+        "properties": {
+          "issuer_payload": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "postEditPostResponse": {
+        "type": "object"
+      },
+      "postGetImageUploadURLResponse": {
+        "type": "object",
+        "properties": {
+          "upload_url": {
+            "type": "string"
+          }
+        }
+      },
+      "protobufAny": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string",
+            "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          }
+        },
+        "additionalProperties": {
+          "type": "object"
+        },
+        "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\nExample 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\nExample 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      },
+      "protobufNullValue": {
+        "type": "string",
+        "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`."
+      },
+      "semanticCreatePostSemanticResponse": {
+        "type": "object"
+      },
+      "semanticCreateUserSemanticResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "semanticDeleteUserSemanticResponse": {
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "description": "This API uses OAuth 2 with the implicit grant flow. [More info](https://api.example.com/docs/auth)",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "/oauth2/auth",
+            "tokenUrl": "/oauth2/token",
+            "scopes": {
+              "POST_ADDON_CREATE": "",
+              "USER_PHONE": "",
+              "USER_ID": "",
+              "USER_ADDON_CREATE": "",
+              "CHAT_MESSAGE_SEND": "",
+              "CHAT_CONVERSATION_READ": "",
+              "USER_POSTS_GET": "",
+              "CHAT_POST_CONVERSATIONS_READ": "",
+              "CHAT_POST_CONVERSATIONS_MESSAGE_SEND": "",
+              "CHAT_SUPPLIER_ALL_CONVERSATIONS_READ": "",
+              "CHAT_SUPPLIER_ALL_CONVERSATIONS_MESSAGE_SEND": "",
+              "USER_VERIFICATION_CREATE": "",
+              "OFFLINE_ACCESS": "",
+              "MANAGEMENT_APPS_READ": "",
+              "MANAGEMENT_APPS_WRITE": "",
+              "POST_ONGOING_IMAGES_GET": "",
+              "USER_POSTS_ADDON_CREATE": "",
+              "POST_EDIT": "",
+              "CONVERSATION_SEND_MESSAGE": "",
+              "BUSINESS_ADDON_CREATE": "",
+              "PAYMENT_ALL_POSTS_REORDER": "",
+              "PAYMENT_ALL_POSTS_PRICING_READ": ""
+            }
+          }
+        }
+      },
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  },
+  "x-original-swagger-version": "2.0"
+}

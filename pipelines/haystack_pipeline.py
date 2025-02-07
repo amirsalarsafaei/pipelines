@@ -8,10 +8,11 @@ description: A pipeline for retrieving relevant information from a knowledge bas
 requirements: haystack-ai, datasets>=2.6.1, sentence-transformers>=2.2.0
 """
 
-from typing import List, Union, Generator, Iterator
-from schemas import OpenAIChatMessage
-import os
 import asyncio
+import os
+from typing import Generator, Iterator, List, Union
+
+from schemas import OpenAIChatMessage
 
 
 class Pipeline:
@@ -21,17 +22,16 @@ class Pipeline:
     async def on_startup(self):
         os.environ["OPENAI_API_KEY"] = "your_openai_api_key_here"
 
-        from haystack.components.embedders import SentenceTransformersDocumentEmbedder
-        from haystack.components.embedders import SentenceTransformersTextEmbedder
-        from haystack.components.retrievers.in_memory import InMemoryEmbeddingRetriever
-        from haystack.components.builders import PromptBuilder
-        from haystack.components.generators import OpenAIGenerator
-
-        from haystack.document_stores.in_memory import InMemoryDocumentStore
-
         from datasets import load_dataset
-        from haystack import Document
-        from haystack import Pipeline
+        from haystack import Document, Pipeline
+        from haystack.components.builders import PromptBuilder
+        from haystack.components.embedders import (
+            SentenceTransformersDocumentEmbedder,
+            SentenceTransformersTextEmbedder)
+        from haystack.components.generators import OpenAIGenerator
+        from haystack.components.retrievers.in_memory import \
+            InMemoryEmbeddingRetriever
+        from haystack.document_stores.in_memory import InMemoryDocumentStore
 
         document_store = InMemoryDocumentStore()
 
