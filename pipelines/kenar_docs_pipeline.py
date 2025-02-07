@@ -122,7 +122,7 @@ When responding to queries:
      -H "X-API-Key: THE_KEY " \
      -H "X-Access-Token: OAUTH_ACCESS_TOKEN"
      -H "Content-Type: application/json" \
-     -d '{"name": "Example Business"}'
+     -d '{{"name": "Example Business"}}'
    ```
 """),
             MessagesPlaceholder(variable_name="chat_history"),
