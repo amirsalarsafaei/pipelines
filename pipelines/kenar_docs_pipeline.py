@@ -300,12 +300,16 @@ When responding to queries:
             ])
             
             # Enhance the user message with context
+            # Escape any curly braces in the context and user message
+            safe_context = context.replace('{', '{{').replace('}', '}}')
+            safe_user_message = user_message.replace('{', '{{').replace('}', '}}')
+            
             enhanced_message = f"""Please answer based on the following context from Kenar documentation:
 
 Context:
-{context}
+{safe_context}
 
-User Question: {user_message}
+User Question: {safe_user_message}
 
 Please provide a clear and specific answer based on the above context."""
 
