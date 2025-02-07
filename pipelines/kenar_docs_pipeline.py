@@ -14,6 +14,8 @@ class Pipeline:
 
     def __init__(self):
         import os
+        self.id = "kenar-docs"
+        self.name = "Kenar Docs"
         self.rag_chain = None
         self.tools = []
         self.retriever = None
@@ -31,17 +33,60 @@ class Pipeline:
 
         )
         
+    def _get_operation_spec(self, operation_id: str) -> str:
+        """
+        Get the OpenAPI specification for a specific operation ID.
+        
+        Args:
+            operation_id: The operation ID to look up
+            
+        Returns:
+            A formatted string containing the operation specification
+        """
+        # Search through all paths and methods
+        for path, methods in self.open_api_doc.get("paths", {}).items():
+            for method, details in methods.items():
+                if details.get("operationId") == operation_id:
+                    # Format the response
+                    parameters = details.get("parameters", [])
+                    param_str = "\n".join([
+                        f"- {p.get('name')} ({p.get('in')}): {p.get('description', 'No description')}"
+                        for p in parameters
+                    ])
+                    
+                    responses = details.get("responses", {})
+                    response_str = "\n".join([
+                        f"- {code}: {resp.get('description', 'No description')}"
+                        for code, resp in responses.items()
+                    ])
+                    
+                    return f"""Operation: {operation_id}
+HTTP Method: {method.upper()}
+Path: {path}
+Summary: {details.get('summary', 'No summary')}
+Description: {details.get('description', 'No description')}
+
+Parameters:
+{param_str}
+
+Responses:
+{response_str}
+"""
+        return f"No operation found with ID: {operation_id}"
+
     async def on_startup(self):
         from langchain.agents import (AgentExecutor,
                                       create_openai_functions_agent)
         from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+        from langchain.tools import Tool
         from langchain_openai import ChatOpenAI
 
         # Initialize OpenAI chat model with tool binding capability
         self.llm = ChatOpenAI(
             temperature=0.7,
-            model="gpt-4o"
-        
+            model="gpt-4o",
+            api_key=self.valves.OPENAI_API_KEY,
+            base_url=self.valves.OPENAI_API_BASE_URL,
         )
 
         self._initialize_open_api_doc()
@@ -54,10 +99,21 @@ class Pipeline:
             Use the provided context to answer questions accurately. 
             If you're not sure about something, say so."""),
             MessagesPlaceholder(variable_name="chat_history"),
-            ("human", "{input}")
+            ("human", "{input}"),
+            ("placeholder", "{agent_scratchpad}"),
         ])
 
-        # Initialize the agent with tools (to be added later)
+        # Create the operation lookup tool
+        operation_tool = Tool(
+            name="get_operation_spec",
+            description="Get detailed OpenAPI specification for a Kenar API operation using its operationId",
+            func=self._get_operation_spec,
+            return_direct=False
+        )
+        
+        self.tools.append(operation_tool)
+
+        # Initialize the agent with tools
         self.agent = create_openai_functions_agent(
             llm=self.llm,
             prompt=prompt,
@@ -99,7 +155,7 @@ class Pipeline:
         # Initialize the GitLoader for markdown files
         loader = GitLoader(
             repo_path=repo_path,
-            branch="main",
+            branch="master",
             file_filter=lambda file_path: file_path.endswith(".md")
         )
 
