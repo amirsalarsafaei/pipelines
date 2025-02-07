@@ -32,7 +32,7 @@ class Pipeline:
             Use the provided context to answer questions accurately. 
             If you're not sure about something, say so."""),
             MessagesPlaceholder(variable_name="chat_history"),
-            ("human", "{question}")
+            ("human", "{input}")
         ])
 
         # Initialize the agent with tools (to be added later)
@@ -189,6 +189,23 @@ class Pipeline:
         """
         from langchain.schema import HumanMessage, SystemMessage
         try:
+            # Retrieve relevant context using the retriever
+            relevant_docs = self.retriever(user_message)
+            context = "\n".join([
+                f"[{doc.metadata.get('source', 'unknown')}]\n{doc.page_content}"
+                for doc in relevant_docs
+            ])
+            
+            # Enhance the user message with context
+            enhanced_message = f"""Please answer based on the following context from Kenar documentation:
+
+Context:
+{context}
+
+User Question: {user_message}
+
+Please provide a clear and specific answer based on the above context."""
+
             # Convert message history to the format expected by LangChain
             chat_history = []
             for msg in messages[:-1]:  # Exclude the current message
@@ -200,7 +217,7 @@ class Pipeline:
                     chat_history.append(SystemMessage(content=content))
 
             response = self.agent_executor.invoke({
-                "input": user_message,
+                "input": enhanced_message,
                 "chat_history": chat_history
             })
 
