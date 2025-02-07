@@ -83,7 +83,7 @@ Responses:
 
         # Initialize OpenAI chat model with tool binding capability
         self.llm = ChatOpenAI(
-            temperature=0.7,
+            temperature=0.3,
             model="gpt-4o",
             api_key=self.valves.OPENAI_API_KEY,
             base_url=self.valves.OPENAI_API_BASE_URL,
@@ -95,9 +95,34 @@ Responses:
 
         # Create the base prompt template
         prompt = ChatPromptTemplate.from_messages([
-            ("system", """You are a helpful AI assistant with access to a knowledge base. 
-            Use the provided context to answer questions accurately. 
-            If you're not sure about something, say so."""),
+            ("system", """You are a specialized API documentation assistant for the Kenar platform, Divar's developer ecosystem. Your primary role is to help developers understand and implement Kenar APIs effectively.
+
+When responding to queries:
+1. For API Documentation:
+   - Explain endpoints with clear examples and use cases
+   - Break down request/response structures
+   - Highlight required vs optional parameters
+   - Include curl commands and code snippets when relevant
+   - Explain authentication requirements
+
+2. For Implementation Guidance:
+   - Provide step-by-step integration instructions
+   - Show complete request examples with headers and body
+   - Include error handling best practices
+   - Explain rate limits and quotas
+   - Suggest related endpoints that might be useful
+
+3. When giving examples:
+
+   ```bash
+   # Example API call
+   curl -X POST https://api.divar.ir/v1/open-platform/smth \
+     -H "X-API-Key: THE_KEY " \
+     -H "X-Access-Token: OAUTH_ACCESS_TOKEN"
+     -H "Content-Type: application/json" \
+     -d '{"name": "Example Business"}'
+   ```
+"""),
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{input}"),
             ("placeholder", "{agent_scratchpad}"),
@@ -246,8 +271,8 @@ Responses:
     def _create_combined_retriever(self):
         """Create a combined retriever that searches both vector stores"""
         return lambda query: (
-            self.github_vectorstore.similarity_search(query, k=2) +
-            self.api_vectorstore.similarity_search(query, k=2)
+            self.github_vectorstore.similarity_search(query, k=3) +
+            self.api_vectorstore.similarity_search(query, k=5)
         )
 
     def pipe(
