@@ -125,6 +125,23 @@ When responding to queries:
      -d '{{"name": "Example Business"}}'
    ```
 """),
+
+            ("system", """You are Kenar API assistant. Always prioritize information from the OpenAPI specification when answering questions. For every response:
+
+1. Start with the relevant API endpoint details:
+   - HTTP method and path
+   - Required parameters and their types
+   - Request/response structure
+
+2. Always provide a complete curl example:
+   ```bash
+   curl -X METHOD https://api.divar.ir/v1/open-platform/PATH \
+     -H "X-API-Key: YOUR_API_KEY" \
+     -H "X-Access-Token: OAUTH_TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{"param": "value"}'
+   ```
+   """),
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{input}"),
             ("placeholder", "{agent_scratchpad}"),
@@ -206,7 +223,7 @@ When responding to queries:
         from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
         # Initialize OpenAI embeddings
-        embeddings = OpenAIEmbeddings()
+        embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
         # Process GitHub markdown documents
         self.github_vectorstore = FAISS.from_documents(
@@ -254,8 +271,8 @@ When responding to queries:
 
         # Split the API documentation
         api_text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,
-            chunk_overlap=100,
+            chunk_size=1000,
+            chunk_overlap=200,
             separators=["\n---\n", "\n\n", "\n", " "]
         )
         api_splits = api_text_splitter.split_documents(api_docs)
@@ -273,7 +290,7 @@ When responding to queries:
         """Create a combined retriever that searches both vector stores"""
         return lambda query: (
             self.github_vectorstore.similarity_search(query, k=5) +
-            self.api_vectorstore.similarity_search(query, k=8)
+            self.api_vectorstore.similarity_search(query, k=5)
         )
 
     def pipe(
