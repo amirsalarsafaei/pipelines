@@ -95,36 +95,6 @@ Responses:
 
         # Create the base prompt template
         prompt = ChatPromptTemplate.from_messages([
-            ("system", """You are a specialized API documentation assistant for the Kenar platform, Divar's developer ecosystem. Your primary role is to help developers understand and implement Kenar APIs effectively.
-
-When responding to queries:
-1. For API Documentation:
-   - Explain endpoints with clear examples and use cases
-   - Break down request/response structures
-   - Highlight required vs optional parameters
-   - Include curl commands and code snippets when relevant
-   - Explain authentication requirements
-   - If you are spoken to in Persian. Respond in Persian but use English terms when applicable.
-
-2. For Implementation Guidance:
-   - Provide step-by-step integration instructions
-   - Show complete request examples with headers and body
-   - Include error handling best practices
-   - Explain rate limits and quotas
-   - Suggest related endpoints that might be useful
-
-3. When giving examples:
-    - The OAuth token is in X-Access-Token which is unconventiall.
-
-   ```bash
-   # Example API call
-   curl -X POST https://api.divar.ir/v1/open-platform/smth \
-     -H "X-API-Key: THE_KEY " \
-     -H "X-Access-Token: OAUTH_ACCESS_TOKEN"
-     -H "Content-Type: application/json" \
-     -d '{{"name": "Example Business"}}'
-   ```
-"""),
 
             ("system", """You are Kenar API assistant. Always prioritize information from the OpenAPI specification when answering questions. For every response:
 
@@ -139,7 +109,7 @@ When responding to queries:
      -H "X-API-Key: YOUR_API_KEY" \
      -H "X-Access-Token: OAUTH_TOKEN" \
      -H "Content-Type: application/json" \
-     -d '{"param": "value"}'
+     -d '{{"param": "value"}}'
    ```
    """),
             MessagesPlaceholder(variable_name="chat_history"),
@@ -218,6 +188,9 @@ When responding to queries:
     def _initialize_vector_stores(self):
         """Initialize two vector stores: one for GitHub docs and one for OpenAPI spec"""
 
+        import json
+        from copy import deepcopy
+
         from langchain.text_splitter import RecursiveCharacterTextSplitter
         from langchain_community.vectorstores import FAISS
         from langchain_openai import ChatOpenAI, OpenAIEmbeddings
@@ -231,19 +204,103 @@ When responding to queries:
             embedding=embeddings
         )
 
-        # Process OpenAPI documentation directly from self.open_api_doc
+        def resolve_ref(ref: str, doc: dict) -> dict:
+            """Resolve a JSON reference in the OpenAPI doc"""
+            if not ref.startswith('#/'):
+                return {}
+            
+            parts = ref[2:].split('/')
+            current = doc
+            for part in parts:
+                if part in current:
+                    current = current[part]
+                else:
+                    return {}
+            return deepcopy(current)
+
+        def format_schema(schema: dict, doc: dict) -> str:
+            """Format a schema with resolved references"""
+            if '$ref' in schema:
+                schema = resolve_ref(schema['$ref'], doc)
+            
+            properties = schema.get('properties', {})
+            formatted_props = []
+            
+            for prop_name, prop in properties.items():
+                if '$ref' in prop:
+                    prop = resolve_ref(prop['$ref'], doc)
+                
+                prop_type = prop.get('type', 'object')
+                if prop_type == 'array' and 'items' in prop:
+                    if '$ref' in prop['items']:
+                        items = resolve_ref(prop['items']['$ref'], doc)
+                        prop_type = f"array of {items.get('type', 'object')}"
+                    else:
+                        prop_type = f"array of {prop['items'].get('type', 'object')}"
+                
+                formatted_props.append(
+                    f"  {prop_name} ({prop_type}): {prop.get('description', 'No description')}"
+                )
+            
+            return "\n".join(formatted_props)
+
+        # Process OpenAPI documentation with resolved references
         api_texts = []
         
         # Process paths
         paths = self.open_api_doc.get("paths", {})
         for path, methods in paths.items():
             for method, details in methods.items():
+                # Resolve parameter references
+                parameters = []
+                for param in details.get('parameters', []):
+                    if '$ref' in param:
+                        param = resolve_ref(param['$ref'], self.open_api_doc)
+                    parameters.append(param)
+                
+                param_str = "\n".join([
+                    f"  {p.get('name')} ({p.get('in')}): {p.get('description', 'No description')}"
+                    for p in parameters
+                ])
+
+                # Resolve request body if present
+                request_body = ""
+                if 'requestBody' in details:
+                    body = details['requestBody']
+                    if '$ref' in body:
+                        body = resolve_ref(body['$ref'], self.open_api_doc)
+                    
+                    content = body.get('content', {}).get('application/json', {})
+                    if 'schema' in content:
+                        schema = content['schema']
+                        request_body = f"\nRequest Body:\n{format_schema(schema, self.open_api_doc)}"
+
+                # Resolve response references
+                responses = details.get('responses', {})
+                response_str = []
+                for code, resp in responses.items():
+                    if '$ref' in resp:
+                        resp = resolve_ref(resp['$ref'], self.open_api_doc)
+                    
+                    content = resp.get('content', {}).get('application/json', {})
+                    if 'schema' in content:
+                        schema = content['schema']
+                        schema_str = format_schema(schema, self.open_api_doc)
+                        response_str.append(f"  {code}: {resp.get('description', '')}\n  Response Schema:\n{schema_str}")
+                    else:
+                        response_str.append(f"  {code}: {resp.get('description', '')}")
+
                 text = f"""
                 Endpoint: {method.upper()} {path}
                 Summary: {details.get('summary', '')}
                 Description: {details.get('description', '')}
-                Parameters: {details.get('parameters', [])}
-                Responses: {details.get('responses', {})}
+                
+                Parameters:
+                {param_str}
+                {request_body}
+                
+                Responses:
+                {chr(10).join(response_str)}
                 """
                 api_texts.append(text)
 
@@ -251,11 +308,13 @@ When responding to queries:
             components = self.open_api_doc.get("components", {})
             schemas = components.get("schemas", {})
             for schema_name, schema in schemas.items():
+                formatted_schema = format_schema(schema, self.open_api_doc)
                 text = f"""
                 Schema: {schema_name}
                 Type: {schema.get('type', '')}
                 Description: {schema.get('description', '')}
-                Properties: {schema.get('properties', {})}
+                Properties:
+                {formatted_schema}
                 """
                 api_texts.append(text)
 
