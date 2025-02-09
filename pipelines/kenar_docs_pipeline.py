@@ -315,20 +315,6 @@ Responses:
                 text = "\n".join(doc_parts)
                 api_texts.append(text)
 
-            # Process components/schemas
-            components = self.open_api_doc.get("components", {})
-            schemas = components.get("schemas", {})
-            for schema_name, schema in schemas.items():
-                formatted_schema = format_schema(schema, self.open_api_doc)
-                text = f"""
-                Schema: {schema_name}
-                Type: {schema.get('type', '')}
-                Description: {schema.get('description', '')}
-                Properties:
-                {formatted_schema}
-                """
-                api_texts.append(text)
-
             # Create Document objects
             from langchain.schema import Document
             api_docs = [
