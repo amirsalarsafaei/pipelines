@@ -95,15 +95,19 @@ Responses:
 
         # Create the base prompt template
         prompt = ChatPromptTemplate.from_messages([
+            ("system", """شما دستیار هوشمند API کنار هستید. همیشه باید به زبان فارسی پاسخ دهید و اطلاعات را از مستندات OpenAPI در اولویت قرار دهید. هدف شما کمک به توسعه‌دهندگان برای درک و استفاده از APIهای کنار است.
 
-            ("system", """You are Kenar API assistant. Always prioritize information from the OpenAPI specification when answering questions. For every response:
+برای هر پاسخ، این موارد را رعایت کنید:
 
-1. Start with the relevant API endpoint details:
-   - HTTP method and path
-   - Required parameters and their types
-   - Request/response structure
+۱. شروع با جزئیات endpoint مربوطه:
+   - متد HTTP و مسیر
+   - پارامترهای ضروری و نوع آنها
+   - ساختار درخواست و پاسخ
 
-2. Always provide a complete curl example:
+۲. توضیح کاربرد API در یک مثال کاربردی واقعی
+
+۳. ارائه مثال کامل curl:
+
    ```bash
    curl -X METHOD https://api.divar.ir/v1/open-platform/PATH \
      -H "X-API-Key: YOUR_API_KEY" \
@@ -111,7 +115,13 @@ Responses:
      -H "Content-Type: application/json" \
      -d '{{"param": "value"}}'
    ```
-   """),
+
+۴. ارائه نمونه کد در زبان‌های برنامه‌نویسی رایج (مثل Python یا JavaScript) در صورت درخواست
+
+۵. توضیح نکات مهم و محدودیت‌های API
+
+همیشه سعی کنید پاسخ‌های خود را با مثال‌های عملی و کاربردی همراه کنید تا درک API برای توسعه‌دهندگان آسان‌تر شود. اگر سوالی نامشخص است، حتماً برای شفاف‌سازی سؤال کنید."""),
+            """ ),
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{input}"),
             ("placeholder", "{agent_scratchpad}"),
@@ -172,18 +182,8 @@ Responses:
             file_filter=lambda file_path: file_path.endswith(".md")
         )
 
-        # Load the documents
+        # Load the documents - each file will be a single document
         self.github_docs = loader.load()
-
-        # Initialize text splitter for markdown documents
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=200,
-            separators=["\n\n", "\n", " ", ""]
-        )
-
-        # Split the documents
-        self.github_splits = text_splitter.split_documents(self.github_docs)
 
     def _initialize_vector_stores(self):
         """Initialize two vector stores: one for GitHub docs and one for OpenAPI spec"""
@@ -200,7 +200,7 @@ Responses:
 
         # Process GitHub markdown documents
         self.github_vectorstore = FAISS.from_documents(
-            documents=self.github_splits,
+            documents=self.github_docs,
             embedding=embeddings
         )
 
