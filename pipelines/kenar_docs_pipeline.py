@@ -218,11 +218,12 @@ Responses:
                     return {}
             return deepcopy(current)
 
-        def format_schema(schema: dict, doc: dict) -> str:
-            """Format a schema with resolved references"""
+        def format_schema(schema: dict, doc: dict, indent: int = 2) -> str:
+            """Format a schema with resolved references and nested objects"""
             if '$ref' in schema:
                 schema = resolve_ref(schema['$ref'], doc)
             
+            indent_str = " " * indent
             properties = schema.get('properties', {})
             formatted_props = []
             
@@ -231,16 +232,46 @@ Responses:
                     prop = resolve_ref(prop['$ref'], doc)
                 
                 prop_type = prop.get('type', 'object')
-                if prop_type == 'array' and 'items' in prop:
-                    if '$ref' in prop['items']:
-                        items = resolve_ref(prop['items']['$ref'], doc)
-                        prop_type = f"array of {items.get('type', 'object')}"
-                    else:
-                        prop_type = f"array of {prop['items'].get('type', 'object')}"
+                base_info = f"{indent_str}{prop_name} ({prop_type})"
                 
-                formatted_props.append(
-                    f"  {prop_name} ({prop_type}): {prop.get('description', 'No description')}"
-                )
+                if prop.get('description'):
+                    base_info += f": {prop['description']}"
+                
+                if prop_type == 'object':
+                    if 'properties' in prop:
+                        nested_props = format_schema(prop, doc, indent + 2)
+                        if nested_props:
+                            formatted_props.append(f"{base_info}:")
+                            formatted_props.append(nested_props)
+                        else:
+                            formatted_props.append(base_info)
+                    elif '$ref' in prop:
+                        ref_schema = resolve_ref(prop['$ref'], doc)
+                        nested_props = format_schema(ref_schema, doc, indent + 2)
+                        if nested_props:
+                            formatted_props.append(f"{base_info}:")
+                            formatted_props.append(nested_props)
+                        else:
+                            formatted_props.append(base_info)
+                    else:
+                        formatted_props.append(base_info)
+                        
+                elif prop_type == 'array' and 'items' in prop:
+                    items = prop['items']
+                    if '$ref' in items:
+                        items = resolve_ref(items['$ref'], doc)
+                    
+                    if items.get('type') == 'object' and ('properties' in items or '$ref' in items):
+                        formatted_props.append(f"{base_info}:")
+                        formatted_props.append(f"{indent_str}  Array items:")
+                        nested_props = format_schema(items, doc, indent + 4)
+                        if nested_props:
+                            formatted_props.append(nested_props)
+                    else:
+                        item_type = items.get('type', 'object')
+                        formatted_props.append(f"{base_info} (array of {item_type})")
+                else:
+                    formatted_props.append(base_info)
             
             return "\n".join(formatted_props)
 
