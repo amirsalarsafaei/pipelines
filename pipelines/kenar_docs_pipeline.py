@@ -346,6 +346,8 @@ Responses:
                 text = "\n".join(doc_parts)
                 api_texts.append(text)
 
+            print("\n\n".join(api_texts))
+
             # Create Document objects
             from langchain.schema import Document
             api_docs = [
