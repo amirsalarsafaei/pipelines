@@ -290,18 +290,29 @@ Responses:
                     else:
                         response_str.append(f"  {code}: {resp.get('description', '')}")
 
-                text = f"""
-                Endpoint: {method.upper()} {path}
-                Summary: {details.get('summary', '')}
-                Description: {details.get('description', '')}
+                # Build endpoint documentation with only non-empty fields
+                doc_parts = [f"Endpoint: {method.upper()} {path}"]
                 
-                Parameters:
-                {param_str}
-                {request_body}
+                if details.get('summary'):
+                    doc_parts.append(f"Summary: {details['summary']}")
+                if details.get('description'):
+                    doc_parts.append(f"Description: {details['description']}")
                 
-                Responses:
-                {chr(10).join(response_str)}
-                """
+                # Add parameters section only if there are parameters
+                if param_str.strip():
+                    doc_parts.append("Parameters:")
+                    doc_parts.append(param_str)
+                
+                # Add request body if present
+                if request_body.strip():
+                    doc_parts.append(request_body)
+                
+                # Add responses if present
+                if response_str:
+                    doc_parts.append("Responses:")
+                    doc_parts.append(chr(10).join(response_str))
+                
+                text = "\n".join(doc_parts)
                 api_texts.append(text)
 
             # Process components/schemas
