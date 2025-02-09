@@ -358,17 +358,9 @@ Responses:
                 for text in api_texts
             ]
 
-        # Split the API documentation
-        api_text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=200,
-            separators=["\n---\n", "\n\n", "\n", " "]
-        )
-        api_splits = api_text_splitter.split_documents(api_docs)
-
-        # Create vector store for API documentation
+        # Create vector store directly from the API docs (already split by endpoint)
         self.api_vectorstore = FAISS.from_documents(
-            documents=api_splits,
+            documents=api_docs,
             embedding=embeddings
         )
 
